@@ -8,40 +8,40 @@
 		<h2>
 			Calculator - By Andrew Jarombek
 		</h2>
-		<table>
+		<table ng-controller="AppController as ctrl">
 			<tbody>
-				<tr ng-cloak>
-					<th colspan="4"><input type="text" name="output" value={{0}}></th>
+				<tr>
+					<th colspan="4"><input type="text" name="output" ng-model="ctrl.view"></th>
 				</tr>
 				<tr>
-					<td><input type="button" name="lpar" value="("></td>
-					<td><input type="button" name="rpar" value="("></td>
-					<td><input type="button" name="null" value=""></td>
-					<td><input type="button" name="clear" value="AC"></td>
+					<td><input ng-click="ctrl.changeView('('))" type="button" name="lpar" value="("></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="rpar" value=")"></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="null" value=""></td>
+					<td><input ng-click="ctrl.clearView()" type="button" name="clear" value="AC"></td>
 				</tr>
 				<tr>
-					<td><input type="button" name="seven" value="7"></td>
-					<td><input type="button" name="eight" value="8"></td>
-					<td><input type="button" name="nine" value="9"></td>
-					<td><input type="button" name="div" value="/"></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="seven" value="7"></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="eight" value="8"></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="nine" value="9"></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="div" value="/"></td>
 				</tr>
 				<tr>
-					<td><input type="button" name="four" value="4"></td>
-					<td><input type="button" name="five" value="5"></td>
-					<td><input type="button" name="six" value="6"></td>
-					<td><input type="button" name="mult" value="x"></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="four" value="4"></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="five" value="5"></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="six" value="6"></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="mult" value="x"></td>
 				</tr>
 				<tr>
-					<td><input type="button" name="one" value="1"></td>
-					<td><input type="button" name="two" value="2"></td>
-					<td><input type="button" name="three" value="3"></td>
-					<td><input type="button" name="minus" value="-"></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="one" value="1"></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="two" value="2"></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="three" value="3"></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="minus" value="-"></td>
 				</tr>
 				<tr>
-					<td><input type="button" name="zero" value="0"></td>
-					<td><input type="button" name="period" value="."></td>
-					<td><input type="button" name="equals" value="="></td>
-					<td><input type="button" name="plus" value="+"></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="zero" value="0"></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="period" value="."></td>
+					<td><input ng-click="ctrl.getResult()" type="button" name="equals" value="="></td>
+					<td><input ng-click="ctrl.changeView()" type="button" name="plus" value="+"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -52,5 +52,18 @@
 	</body>
 	<script type="text/javascript">
 		angular.module('myApp', [])
+		.controller('AppController', [function() {
+			var self = this;
+			self.view = '';
+			self.changeView = function(value) {
+				self.view += value;
+			}
+			self.clearView = function() {
+				
+			}
+			self.getResult = function() {
+				
+			}
+		}]);
 	</script>
 </html>
