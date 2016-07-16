@@ -1,11 +1,56 @@
 <html>
 	<head>
 		<title>Home</title>
+		<link rel="stylesheet" href="resources/style.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.js"></script>
 	</head>
-	<body>
-		<h1>
-			Calculator
-		</h1>
+	<body ng-app="myApp">
+		<h2>
+			Calculator - By Andrew Jarombek
+		</h2>
+		<table>
+			<tbody>
+				<tr ng-cloak>
+					<th colspan="4"><input type="text" name="output" value={{0}}></th>
+				</tr>
+				<tr>
+					<td><input type="button" name="lpar" value="("></td>
+					<td><input type="button" name="rpar" value="("></td>
+					<td><input type="button" name="null" value=""></td>
+					<td><input type="button" name="clear" value="AC"></td>
+				</tr>
+				<tr>
+					<td><input type="button" name="seven" value="7"></td>
+					<td><input type="button" name="eight" value="8"></td>
+					<td><input type="button" name="nine" value="9"></td>
+					<td><input type="button" name="div" value="/"></td>
+				</tr>
+				<tr>
+					<td><input type="button" name="four" value="4"></td>
+					<td><input type="button" name="five" value="5"></td>
+					<td><input type="button" name="six" value="6"></td>
+					<td><input type="button" name="mult" value="x"></td>
+				</tr>
+				<tr>
+					<td><input type="button" name="one" value="1"></td>
+					<td><input type="button" name="two" value="2"></td>
+					<td><input type="button" name="three" value="3"></td>
+					<td><input type="button" name="minus" value="-"></td>
+				</tr>
+				<tr>
+					<td><input type="button" name="zero" value="0"></td>
+					<td><input type="button" name="period" value="."></td>
+					<td><input type="button" name="equals" value="="></td>
+					<td><input type="button" name="plus" value="+"></td>
+				</tr>
+			</tbody>
+		</table>
+		<p><br>This Calculator was made as a mini test project using Java and JavaScript.<br>
+			The Backend was made with Java and the Spring MVC Web Framework.<br>
+			The Frontend was made with JavaScript and Angular.js.<br>
+			Created: July 2016.  Author: Andrew Jarombek</p>
 	</body>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.js"></script>
+	<script type="text/javascript">
+		angular.module('myApp', [])
+	</script>
 </html>
