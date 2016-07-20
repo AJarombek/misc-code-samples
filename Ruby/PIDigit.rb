@@ -1,7 +1,8 @@
 # Author: Andrew Jarombek
 # Date: 7/19/2016
 # Enter a number and have the program generate PI up to that many decimal places.
-# Keep a limit to how far the program will go.
+# Keep a limit to how far the program will go. (Correct answer up to 48 decimal places)
+# [CMD] Usage: > ruby PIDigit.rb [decimalPlaces]
 
 class PIDigit
     # Ruby uses snakecase for varaible/method names 
