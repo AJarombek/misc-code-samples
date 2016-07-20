@@ -23,8 +23,21 @@ public class Person {
         this.alive = alive;
     }
 
+    public Person(String firstName, String lastName, String born, boolean alive, String died,
+                  Person[] partners, Person[] children, Person[] parents) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.born = born;
+        this.alive = alive;
+        this.died = died;
+        this.partners = partners;
+        this.children = children;
+        this.parents = parents;
+    }
+
     @Override
     public String toString() {
+        // Create a formatted substring for the persons partners
         String partnerString = "[";
         if (partners != null) {
             for (int i = 0; i < partners.length; i++) {
@@ -35,6 +48,7 @@ public class Person {
         }
         partnerString += "]";
 
+        // Create a formatted substring for the persons parents
         String parentString = "[";
         if (parents != null) {
             parentString += parents[0].getFirstName() + " " + parents[0].getLastName() + ", "
@@ -42,20 +56,34 @@ public class Person {
         }
         parentString += "]";
 
+        // Create a formatted substring for the persons children
         String childrenString = "[";
         if (children != null) {
             for (int i = 0; i < children.length; i++) {
-                if (i < 0)
+                if (i > 0)
                     childrenString += ", ";
                 childrenString += children[i].getFirstName() + " " + children[i].getLastName();
             }
         }
         childrenString += "]";
 
+        // Add a status to the string that tells if they are living
         String status = (alive) ? "Living" : "Deceased";
         return "[Name:" + getFirstName() + " " + getLastName() + ", Born:" + getBorn() + ", Died:" + getDied() +
                 ", Status:" + status + ", Parents:" + parentString + ", Partners:" + partnerString +
                 ", Children:" + childrenString + "]";
+    }
+
+    /**
+     * Create a shorter string of the Person object
+     * @return String representation of the person
+     */
+    public String shortToString() {
+        String status = (alive) ? "Living" : "Deceased";
+        String personString = "[Name:" + getFirstName() + " " + getLastName() + ", Born:" + getBorn();
+        if (!alive) personString += ", Died:" + getDied();
+        personString += ", Status:" + status + "]";
+        return personString;
     }
 
     public String getFirstName() {
@@ -72,6 +100,10 @@ public class Person {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 
     public String getBorn() {
