@@ -14,6 +14,7 @@ namespace BasicFrameworkTypes
             // Execute all the classes containing type exploration code
             Strings.Execute();
             DateTimes.Execute();
+            ParseFormat.Execute();
         }
     }
 }
