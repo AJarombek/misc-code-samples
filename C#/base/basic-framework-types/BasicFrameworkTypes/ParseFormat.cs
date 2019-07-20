@@ -1,6 +1,6 @@
 /**
  * Investigate the parsing and formatting types found in the .NET Framework
- * Sources: [C# 7.0 In a Nutshell: Page 257-]
+ * Sources: [C# 7.0 In a Nutshell: Page 257-266]
  * Author: Andrew Jarombek
  * Date: 7/17/2019
  */
@@ -44,6 +44,21 @@ namespace BasicFrameworkTypes
             nf.PositiveInfinitySymbol = "\u221E";
             double infinity = double.PositiveInfinity;
             Assert(infinity.ToString(nf).Equals("∞"));
+            
+            // Parse a hexadecimal number and currency
+            // Java - []
+            var twentySix = int.Parse("1A", NumberStyles.HexNumber);
+            Assert(twentySix == 26);
+
+            var twoDollarsFiftyCents = double.Parse("$2.50", NumberStyles.Currency);
+            Assert(twoDollarsFiftyCents == 2.50);
+            
+            // You can also use System.Convert for hexadecimal and other bases (such as octal)
+            var twentySixAgain = Convert.ToInt32("1A", 16);
+            Assert(twentySix == twentySixAgain);
+
+            var twentySixOctal = Convert.ToInt32("32", 8);
+            Assert(twentySixOctal == twentySix);
         }
     }
 }

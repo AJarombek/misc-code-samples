@@ -15,6 +15,7 @@ namespace BasicFrameworkTypes
             Strings.Execute();
             DateTimes.Execute();
             ParseFormat.Execute();
+            ConvertTypes.Execute();
         }
     }
 }
