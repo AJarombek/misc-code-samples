@@ -46,7 +46,7 @@ namespace BasicFrameworkTypes
             Assert(infinity.ToString(nf).Equals("∞"));
             
             // Parse a hexadecimal number and currency
-            // Java - []
+            // Java - [https://bit.ly/2Zc1DhH]
             var twentySix = int.Parse("1A", NumberStyles.HexNumber);
             Assert(twentySix == 26);
 

@@ -5,9 +5,11 @@
  * Date: 7/14/2019
  */
 
+using System;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Threading;
 using static System.Diagnostics.Debug;
 
 namespace BasicFrameworkTypes
@@ -83,6 +85,15 @@ namespace BasicFrameworkTypes
             byte[] utf32BA = Encoding.UTF32.GetBytes("Hello World!");
             byte[] asciiBA = Encoding.ASCII.GetBytes("Hello World!");
             Assert(utf8BA.Length == 12 && utf8BA.Length == asciiBA.Length && utf32BA.Length == 48);
+            
+            // You can reassign the current culture of the running thread.
+            // This is useful for testing how code will work in different locations [pg. 274].
+            Assert("i".ToUpper().Equals("I") && "I".ToLower().Equals("i"));
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("tr-TR");
+            Assert(!"i".ToUpper().Equals("I") && !"I".ToLower().Equals("i"));
+            
+            // Switch the culture back to United States / English
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
         }
     }
 }
