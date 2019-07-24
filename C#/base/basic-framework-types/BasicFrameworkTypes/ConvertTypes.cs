@@ -1,6 +1,6 @@
 /**
  * Investigate the parsing and formatting types found in the .NET Framework
- * Sources: [C# 7.0 In a Nutshell: Page 270-]
+ * Sources: [C# 7.0 In a Nutshell: Page 270-272]
  * Author: Andrew Jarombek
  * Date: 7/20/2019
  */
@@ -41,6 +41,7 @@ namespace BasicFrameworkTypes
             
             // Double conversions are more complex.  They are stored in 8 bytes (64 bits) using the IEEE standard.
             // https://en.wikipedia.org/wiki/Double-precision_floating-point_format
+            // Java - [https://bit.ly/2YdnMdV]
             byte[] zeroBytes = BitConverter.GetBytes(0.0);
             byte[] oneBytes = BitConverter.GetBytes(1.0);
             byte[] twoBytes = BitConverter.GetBytes(2.0);

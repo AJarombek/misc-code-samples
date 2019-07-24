@@ -22,7 +22,7 @@ class Convert {
         // Ways to convert an integer to a byte array.  The first way uses the unsigned right shift operator.
         // We want to shift over the sign bit just like all the other bits.
         // https://www.tutorialspoint.com/Bitwise-right-shift-operator-in-Java
-        // C# - []
+        // C# - [https://bit.ly/2Y2tnZl]
         byte[] twentySixInBytes = new byte[] {
                 (byte)(twentySix >>> 24),
                 (byte)(twentySix >>> 16),
