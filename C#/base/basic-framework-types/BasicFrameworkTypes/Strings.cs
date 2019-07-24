@@ -1,6 +1,6 @@
 /**
  * Investigate the basic String type found in the .NET Framework
- * Sources: [C# 7.0 In a Nutshell: Page 229-242]
+ * Sources: [C# 7.0 In a Nutshell: Page 229-283]
  * Author: Andrew Jarombek
  * Date: 7/14/2019
  */
@@ -94,6 +94,11 @@ namespace BasicFrameworkTypes
             
             // Switch the culture back to United States / English
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+            
+            // C# has built in functionality for creating UUIDs (GUIDs). GUID is a UUID.  GUID is Microsoft's
+            // implementation of the UUID standard.
+            Guid guid = new Guid();
+            Assert(guid.ToString().Length == 36); // 32 bits hex plus four "-" characters
         }
     }
 }
