@@ -10,6 +10,43 @@ using static System.Diagnostics.Debug;
 
 namespace BasicFrameworkTypes
 {
+    /// <summary>
+    /// Class representing a ball of yarn.
+    /// </summary>
+    class Yarn : IEquatable<Yarn>
+    {
+        public readonly int Length;
+        public readonly YarnWeight Weight;
+
+        public Yarn(int length, YarnWeight weight)
+        {
+            this.Length = length;
+            this.Weight = weight;
+        }
+        
+        public enum YarnWeight
+        {
+            Lace = 0, SuperFine = 1, Fine = 2, LightWeight = 3, 
+            Medium = 4, Bulky = 5, SuperBulky = 6, Jumbo = 7
+        }
+        
+        public override bool Equals(object obj)
+        {
+            // Shorthand without casting for: obj is Yarn && Equals((Yarn) obj)
+            return obj is Yarn yarn && Equals(yarn);
+        }
+
+        public bool Equals(Yarn other) => Length == other.Length && Weight.Equals(other.Weight);
+
+        public override int GetHashCode()
+        {
+            var hash = 17;
+            hash = hash * 31 + Length.GetHashCode();
+            hash = hash * 31 + Weight.GetHashCode();
+            return hash;
+        }
+    }
+    
     public static class Equality
     {
         public static void Execute()
@@ -33,8 +70,44 @@ namespace BasicFrameworkTypes
             int anotherOne = 1;
             object objOneAgain = anotherOne;
             
+            Assert(objOne != objTwo);
             Assert(objOne.Equals(objTwo) == false);
-            Assert(objOne.Equals(objOneAgain)); // Interestingly, this is true even when boxed.
+            
+            Assert(objOne != objOneAgain); // Since the integers are boxed, == checks for reference equality.
+            Assert(objOne.Equals(objOneAgain)); // And Equals() checks for value equality.
+            
+            // The differences between Equals() and == aren't as straightforward in C# as they are in Java.
+            // For example, with the URI reference type == checks for value equality.  This is because C# allows for
+            // operator overloading.  Java does not permit operator overloading.
+            Uri jarombekCom = new Uri("https://jarombek.com");
+            Uri jarombekCom2 = new Uri("https://jarombek.com");
+            Assert(jarombekCom == jarombekCom2); // If this was reference equality, it would return false.
+            
+            // Similar to Java, object has a static method for computing null safe equality with the Equals() method.
+            object obj1 = null;
+            object obj2 = new object();
+
+            try
+            {
+                // This command should always fail with a NullReferenceException
+                obj1.Equals(obj2);
+                
+                Assert(false);
+            }
+            catch (NullReferenceException e)
+            {
+                Assert(true);
+            }
+            
+            // The static method is null-safe.  However, it boxes value types, making it a
+            // costly operation performance wise.  For basic types, creating a similar static Equals method with
+            // the IEquatable interface is a faster workaround.
+            bool isEqual = object.Equals(obj1, obj2);
+            bool isRefEqual = ReferenceEquals(obj1, obj2);
+            Assert(!isEqual && !isRefEqual);
+            
+            // Yarn is a custom class which implements IEquatable<T>.  It also overrides object.Equals().
+            Yarn pinkYarn = new Yarn(210, Yarn.YarnWeight.SuperBulky);
         }
     }
 }
