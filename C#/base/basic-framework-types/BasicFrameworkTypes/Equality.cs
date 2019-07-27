@@ -13,7 +13,7 @@ namespace BasicFrameworkTypes
     /// <summary>
     /// Class representing a ball of yarn.
     /// </summary>
-    class Yarn : IEquatable<Yarn>
+    class Yarn : IEquatable<Yarn>, IComparable<Yarn>, IComparable
     {
         public readonly int Length;
         public readonly YarnWeight Weight;
@@ -38,7 +38,20 @@ namespace BasicFrameworkTypes
             Lace = 0, SuperFine = 1, Fine = 2, LightWeight = 3, 
             Medium = 4, Bulky = 5, SuperBulky = 6, Jumbo = 7
         }
-        
+
+        /// <inheritdoc/>
+        public int CompareTo(Yarn other)
+        {
+            // Rule 1 of IComparable - when Equals() returns true CompareTo() should return 0.
+            if (Equals(other))
+            {
+                return 0;
+            }
+            
+            var result = Length.CompareTo(other.Length);
+            return result == 0 ? Weight.CompareTo(other.Weight) : result;
+        }
+
         /// <inheritdoc/>
         public override bool Equals(object obj)
         {
@@ -64,6 +77,33 @@ namespace BasicFrameworkTypes
             hash = hash * 31 + Weight.GetHashCode();
             return hash;
         }
+        
+        /// <inheritdoc/>
+        public int CompareTo(object obj)
+        {
+            if (!(obj is Yarn))
+            {
+                throw new InvalidOperationException("Argument obj is not of type Yarn.");
+            }
+
+            return CompareTo((Yarn) obj);
+        }
+        
+        /// <summary>
+        /// Overload the &lt; operator to check if one Yarn object is less than another.
+        /// </summary>
+        /// <param name="y1">The first yarn object to compare (written before the &lt; operator).</param>
+        /// <param name="y2">The second yarn object to compare (written after the &lt; operator).</param>
+        /// <returns></returns>
+        public static bool operator < (Yarn y1, Yarn y2) => y1.CompareTo(y2) < 0;
+
+        /// <summary>
+        /// Overload the > operator to check if one Yarn object is greater than another.
+        /// </summary>
+        /// <param name="y1">The first yarn object to compare (written before the > operator).</param>
+        /// <param name="y2">The second yarn object to compare (written after the > operator).</param>
+        /// <returns></returns>
+        public static bool operator > (Yarn y1, Yarn y2) => y1.CompareTo(y2) > 0;
     }
 
     /// <summary>
@@ -121,6 +161,7 @@ namespace BasicFrameworkTypes
         {
             // Value types can only use value equality (==).  This is similar to how Java primitives
             // can only use the == operator.
+            // Java - []
             int one = 1;
             int two = 2;
             Assert(one != two);
