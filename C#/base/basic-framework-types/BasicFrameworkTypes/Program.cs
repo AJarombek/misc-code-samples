@@ -19,6 +19,7 @@ namespace BasicFrameworkTypes
             Numbers.Execute();
             Enums.Execute();
             Equality.Execute();
+            OS.Execute();
         }
     }
 }
