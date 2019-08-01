@@ -1,3 +1,5 @@
+package basic_types;
+
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -9,7 +11,7 @@ import java.util.Arrays;
 
 class Convert {
 
-    static void Execute() {
+    static void execute() {
         // Convert a string to an integer
         var year = Integer.parseInt("2019");
         assert year == 2019;

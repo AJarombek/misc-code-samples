@@ -1,3 +1,5 @@
+package basic_types;
+
 /**
  * Determining equality in Java.
  * @author Andrew Jarombek
@@ -5,7 +7,7 @@
  */
 
 class Equality {
-    static void Execute() {
+    static void execute() {
         // C# - []
         // Unlike C#, Java primitives can't use equals().  This means they always use value equality.
         int five = 5;
