@@ -14,10 +14,17 @@ class AndyList<T> implements Iterable<T> {
     private final List<T> internalList;
 
     /**
+     * Default constructor for an AndyList that is empty.
+     */
+    AndyList() {
+        internalList = new ArrayList<>();
+    }
+
+    /**
      * Construct a custom list representation.  Stores a list internally using object composition.
      * @param iterable takes in any iterable as an argument and coverts it into a list.
      */
-    public AndyList(Iterable<T> iterable) {
+    AndyList(Iterable<T> iterable) {
         List<T> list = new ArrayList<>();
         iterable.forEach(list::add);
         internalList = list;
@@ -66,6 +73,13 @@ class AndyList<T> implements Iterable<T> {
         // One past the greatest index in the list.  The size() of the list.
         int fence;
 
+        /**
+         * Construct a spliterator for an AndyList instance.  Since the class is static, the list must be
+         * passed in through the constructor.
+         * @param list The internal list held by an AndyList instance.
+         * @param origin The first index to iterate upon.
+         * @param fence The index marking when the spliterator should stop iterating.
+         */
         AndyListSpliterator(List<T> list, int origin, int fence) {
             this.list = list;
             this.origin = origin;
@@ -80,7 +94,7 @@ class AndyList<T> implements Iterable<T> {
             Objects.requireNonNull(action);
             if (origin < fence) {
                 action.accept(list.get(origin));
-                origin =+ 1;
+                origin++;
                 return true;
             } else {
                 return false;
@@ -108,7 +122,7 @@ class AndyList<T> implements Iterable<T> {
          */
         @Override
         public long estimateSize() {
-            return (fence - origin) / 2;
+            return fence - origin;
         }
 
         /**

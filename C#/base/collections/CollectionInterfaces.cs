@@ -133,7 +133,7 @@ namespace collections
             // Collections implement the IEnumerable and IEnumerable<T> interfaces.  They specify a single method
             // GetEnumerator(), which returns a class that implements IEnumerable and IEnumerable<T>.  IEnumerable
             // specifies three methods - MoveNext(), Current(), and Reset().
-            // Java = []
+            // Java = [https://bit.ly/2YnRP7Q]
             var list = new List<int> {2, 4, 6};
             IEnumerator<int> enumerator = list.GetEnumerator();
             
@@ -200,6 +200,10 @@ namespace collections
                 }
             }
             Assert(count == 30);
+            
+            // Countable collections of objects implement the ICollection<T> interface along with
+            // its non-generic counterpart ICollection.
+            ICollection<int> iCollection = new List<int> {2, 4};
         }
     }
 }
