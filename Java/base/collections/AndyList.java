@@ -48,48 +48,76 @@ class AndyList<T> implements Iterable<T> {
      */
     @Override
     public Spliterator<T> spliterator() {
+        return new AndyListSpliterator<>(internalList, 0, internalList.size());
+    }
 
-        // Return an anonymous inner Spliterator class instance.
-        return new Spliterator<T>() {
-            // The current index being iterated on.
-            int index = 0;
-            // One past the greatest index in the list.
-            int fence = -1;
+    /**
+     * Static inner class for a custom spliterator implementation for AndyList.
+     * @param <T> the generic type of the list the spliterator acts upon.
+     */
+    private static class AndyListSpliterator<T> implements Spliterator<T> {
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public boolean tryAdvance(Consumer<? super T> action) {
-                Objects.requireNonNull(action);
-                action.accept(internalList.get(index));
+        // List to iterate over.  Passed in through the constructor.
+        final List<T> list;
+
+        // The current index being iterated on.
+        int origin;
+
+        // One past the greatest index in the list.  The size() of the list.
+        int fence;
+
+        AndyListSpliterator(List<T> list, int origin, int fence) {
+            this.list = list;
+            this.origin = origin;
+            this.fence = fence;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean tryAdvance(Consumer<? super T> action) {
+            Objects.requireNonNull(action);
+            if (origin < fence) {
+                action.accept(list.get(origin));
+                origin =+ 1;
+                return true;
+            } else {
                 return false;
             }
+        }
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public Spliterator<T> trySplit() {
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Spliterator<T> trySplit() {
+            int low = origin;
+            int high = fence;
+            int mid = (low + high) >>> 1; // Divide the lowest index plus the highest index in the spliterator in half
+            if (low < mid) {
+                origin = mid;
+                return new AndyListSpliterator<>(list, low, mid);
+            } else {
                 return null;
             }
+        }
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public long estimateSize() {
-                return (fence - index) / 2;
-            }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public long estimateSize() {
+            return (fence - origin) / 2;
+        }
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public int characteristics() {
-                return IMMUTABLE | SIZED;
-            }
-        };
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int characteristics() {
+            return IMMUTABLE | SIZED;
+        }
     }
 
     /**
