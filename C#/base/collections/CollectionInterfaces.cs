@@ -1,6 +1,6 @@
 /**
  * Investigate the interfaces that make up collections in the .NET Framework
- * Sources: [C# 7.0 In a Nutshell: Page 301-]
+ * Sources: [C# 7.0 In a Nutshell: Page 301-313]
  * Author: Andrew Jarombek
  * Date: 7/29/2019
  */
@@ -203,7 +203,22 @@ namespace collections
             
             // Countable collections of objects implement the ICollection<T> interface along with
             // its non-generic counterpart ICollection.
-            ICollection<int> iCollection = new List<int> {2, 4};
+            var countableList = new List<int> {2, 4};
+            ICollection<int> iCollection = countableList;
+            Assert(iCollection.Count == 2);
+
+            ICollection iCollectionNonGeneric = countableList;
+            Assert(iCollectionNonGeneric.Count == 2);
+            
+            // Collections indexed by position implement IList<T> and IList.  IList<T> extends ICollection<T>,
+            // IEnumerable<T>, and IEnumerable.  IList extends ICollection and IEnumerable.
+            IList<int> iList = countableList;
+            IList iListNonGeneric = countableList;
+            Assert(iList.IndexOf(2) == 0 && iList[1] == 4);
+            Assert(iListNonGeneric.IndexOf(2) == 0 && Equals(iListNonGeneric[1], 4));
+
+            // Setting the compile time type to IReadOnlyList<T> means I can't use methods that modify the list.
+            IReadOnlyList<int> _ = countableList;
         }
     }
 }

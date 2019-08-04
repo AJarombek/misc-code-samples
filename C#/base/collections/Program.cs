@@ -13,6 +13,7 @@ namespace collections
         {
             // Execute all the classes containing type exploration code
             CollectionInterfaces.Execute();
+            Arrays.Execute();
         }
     }
 }
