@@ -1,6 +1,6 @@
 /**
  * Investigate Arrays in C#
- * Sources: [C# 7.0 In a Nutshell: Page 313-]
+ * Sources: [C# 7.0 In a Nutshell: Page 313-321]
  * Author: Andrew Jarombek
  * Date: 8/3/2019
  */
