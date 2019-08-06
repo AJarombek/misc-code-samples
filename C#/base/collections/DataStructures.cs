@@ -7,6 +7,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using static System.Diagnostics.Debug;
 
@@ -55,6 +56,87 @@ namespace collections
             arrayList.Add("Hello");
             string firstItem = (string) arrayList[0];
             Assert(firstItem.Equals("Hello"));
+            
+            // LinkedList<> is a double linked list just like its Java counterpart.  Unlike List<>, inserting into
+            // the middle of a linked list is a O(1) operation instead of O(n).
+            var linkedList = new LinkedList<string>();
+            linkedList.AddFirst("Tod's Point");
+            linkedList.AddAfter(linkedList.First, "Mianus River Park");
+            linkedList.AddLast("Rockefeller Park");
+            linkedList.AddAfter(linkedList.First.Next, "Babcock Preserve");
+
+            // Indexing and searching are O(n) since the list has to be traversed across the links.
+            LinkedListNode<string> node = linkedList.First.Next.Next;
+            var babcockPreserve = node.Value;
+            
+            Assert(linkedList.Count == 4);
+            Assert(babcockPreserve.Equals("Babcock Preserve"));
+            
+            // Queue<T> and Stack<T> are internally implemented as resizable arrays.  Usually insertion and deletion
+            // operations are O(1) except for when the internal array needs to be resized.  In that case they take O(n).
+            var queue = new Queue<int>();
+            queue.Enqueue(1);
+            Assert(queue.Peek() == 1);
+            Assert(queue.Dequeue() == 1);
+            Assert(queue.Count == 0);
+            
+            var tasks = new Stack<string>();
+            tasks.Push("Finish Knitting Blanket");
+            Assert(tasks.Peek() == "Finish Knitting Blanket");
+            Assert(tasks.Pop() == "Finish Knitting Blanket");
+            Assert(tasks.Count == 0); // Prove I finished knitting the blanket wedding gift
+            
+            // A BitArray stores a single bit at each index instead of an entire byte used by booleans
+            var bitArray = new BitArray(new [] {true, false});
+            Assert(bitArray.Length == 2);
+            Assert(bitArray[0] && !bitArray[1]);
+
+            // NOT bitwise operation: ~10 = 01
+            bitArray.Not();
+            Assert(!bitArray[0] && bitArray[1]);
+
+            // AND bitwise operation: 01 & 10 = 00
+            bitArray.And(new BitArray(new [] {true, false}));
+            Assert(!bitArray[0] && !bitArray[1]);
+
+            // OR bitwise operation: 00 | 10 = 10
+            bitArray.Or(new BitArray(new[] {true, false}));
+            Assert(bitArray[0] && !bitArray[1]);
+
+            // XOR bitwise operation: 10 ⊕ 11 = 01
+            bitArray.Xor(new BitArray(new[] {true, true}));
+            Assert(!bitArray[0] && bitArray[1]);
+            
+            // C# has two main set data structures - HashSet<t> and SortedSet<T>.  HashSet is backed by a hash table
+            // and SortedSet by a red-black tree.
+            HashSet<sbyte> sbytes = new HashSet<sbyte> {2, 3, 4};
+            SortedSet<byte> bytes = new SortedSet<byte> {5, 6, 7};
+            
+            // Set Union: {2, 3, 4} ∪ {4, 5} = {2, 3, 4, 5}
+            // Use SequenceEqual() because Equals() checks for reference equality.
+            sbytes.UnionWith(new sbyte[] {4, 5});
+            Assert(sbytes.Count == 4);
+            Assert(sbytes.SequenceEqual(new HashSet<sbyte> {2, 3, 4, 5})); 
+            
+            // Set Intersect: {5, 6, 7} ∩ {6, 7, 8} = {6, 7}
+            bytes.IntersectWith(new byte[] {6, 7, 8});
+            Assert(bytes.Count == 2);
+            Assert(bytes.SequenceEqual(new SortedSet<byte> {6, 7}));
+            
+            HashSet<ulong> ulongs = new HashSet<ulong> {10, 100, 1_000};
+            SortedSet<long> longs = new SortedSet<long> {10_000, 100_000};
+
+            // Subset: {10, 100, 1_000} ⊆ {1, 10, 100, 1_000} = true
+            var subsetOf = ulongs.IsSubsetOf(new ulong[] {1, 10, 100, 1_000});
+            Assert(subsetOf);
+            
+            // Proper Subset (not equal sets): {10, 100, 1_000} ⊂ {1, 10, 100, 1_000} = true
+            var properSubsetOf = ulongs.IsProperSubsetOf(new ulong[] {1, 10, 100, 1_000});
+            Assert(properSubsetOf);
+            
+            // Proper Subset (not equal sets): {10, 100, 1_000} ⊂ {10, 100, 1_000} = false
+            var properSubsetOf2 = ulongs.IsProperSubsetOf(new ulong[] {10, 100, 1_000});
+            Assert(!properSubsetOf2);
         }
     }
 }
