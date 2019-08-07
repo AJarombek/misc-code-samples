@@ -5,8 +5,10 @@
  * Date: 8/4/2019
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
 using static System.Diagnostics.Debug;
@@ -137,6 +139,69 @@ namespace collections
             // Proper Subset (not equal sets): {10, 100, 1_000} ⊂ {10, 100, 1_000} = false
             var properSubsetOf2 = ulongs.IsProperSubsetOf(new ulong[] {10, 100, 1_000});
             Assert(!properSubsetOf2);
+
+            // Superset: {10_000, 100_000} ⊇ {10_000} = true
+            var supersetOf1 = longs.IsSupersetOf(new long[] {10_000});
+            Assert(supersetOf1);
+            
+            // Superset: {10_000, 100_000} ⊇ {10_000, 100_000} = true
+            var supersetOf2 = longs.IsSupersetOf(new long[] {10_000, 100_000});
+            Assert(supersetOf2);
+            
+            // Proper Superset (not equal sets): {10_000, 100_000} ⊃ {10_000} = true
+            var properSupersetOf1 = longs.IsProperSupersetOf(new long[] {10_000});
+            Assert(properSupersetOf1);
+            
+            // Proper Superset (not equal sets): {10_000, 100_000} ⊃ {10_000, 100_000} = false
+            var properSupersetOf2 = longs.IsProperSupersetOf(new long[] {10_000, 100_000});
+            Assert(!properSupersetOf2);
+            
+            // The main dictionary type (Dictionary<K, V>) in C# uses an underlying hash table.  Average (best) case
+            // hash tables are very fast - O(1) insert, O(1) retrieval, O(1) delete.  All operations are O(n)
+            // worst case.
+            var dict = new Dictionary<DateTime, double>();
+            
+            dict.Add(new DateTime(2019, 02, 26), 12.31);
+            dict.Add(new DateTime(2019, 12, 31), 26.2);
+            
+            // C# has a number of alternative dictionaries.
+            // Hashtable is the legacy and non-generic version of Dictionary<K,V>.
+            Hashtable _ = new Hashtable();
+            
+            // OrderedDictionary is a combination of a hash table and array.  It maintains the order in which items
+            // are added to the dictionary.  This comes at a small performance and memory usage penalty.
+            OrderedDictionary orderedDictionary = new OrderedDictionary();
+            orderedDictionary.Add(2014, "Java");
+            orderedDictionary.Add(2015, "Java");
+            orderedDictionary.Add(2016, "Java");
+            orderedDictionary.Add(2017, "Java");
+            orderedDictionary.Add(2018, "JavaScript");
+            orderedDictionary.Add(2019, "Python");
+
+            var first = orderedDictionary[0];
+            var last = orderedDictionary[orderedDictionary.Count - 1];
+            Assert(first.Equals("Java") && last.Equals("Python"));
+            
+            // ListDictionary is backed by a singly linked list.  It is very slow except for lists of size < 10.
+            ListDictionary __ = new ListDictionary();
+            
+            // SortedDictionary<K, V> is always sorted by key and is backed by a red-black tree.  Therefore its
+            // retrieval and insertion times are O(log n).  That performance hit is worthwhile if sorted order
+            // is crucial.
+            SortedDictionary<int, string> agileSprintTasks = new SortedDictionary<int, string>();
+            agileSprintTasks.Add(1, "C# Code Samples Pg. 325-250");
+            agileSprintTasks.Add(3, "Publish Haskell Applicatives Article to jarombek.com");
+            agileSprintTasks.Add(2, "Proof Read Haskell Applicatives Article");
+
+            // Prove the dictionary key -> value pairs are sorted by the integer key ascending.
+            var it = agileSprintTasks.GetEnumerator();
+            it.MoveNext();
+            Assert(it.Current.Value.Equals("C# Code Samples Pg. 325-250"));
+            it.MoveNext();
+            Assert(it.Current.Value.Equals("Proof Read Haskell Applicatives Article"));
+            it.MoveNext();
+            Assert(it.Current.Value.Equals("Publish Haskell Applicatives Article to jarombek.com"));
+            it.Dispose();
         }
     }
 }

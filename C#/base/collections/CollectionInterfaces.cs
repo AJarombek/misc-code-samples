@@ -219,6 +219,21 @@ namespace collections
 
             // Setting the compile time type to IReadOnlyList<T> means I can't use methods that modify the list.
             IReadOnlyList<int> _ = countableList;
+            
+            IDictionary<string, int> linesWritten2019 = new Dictionary<string, int>();
+            
+            // Top 3 languages of the year so far.  Demonstrate the methods implemented from IDictionary.
+            linesWritten2019.Add("Python", 7921);
+            linesWritten2019.Add("JavaScript", 3974);
+            linesWritten2019.Add("HCL", 3450);
+            linesWritten2019.Add("Markdown", 2751);
+
+            linesWritten2019.Remove("Markdown");
+            
+            var keys = linesWritten2019.Keys;
+            var values = linesWritten2019.Values;
+            Assert(values.Count == 3 && keys.Count == 3);
+            Assert(linesWritten2019["Python"] == 7921);
         }
     }
 }
