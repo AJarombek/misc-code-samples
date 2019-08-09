@@ -8,6 +8,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -15,6 +16,42 @@ using static System.Diagnostics.Debug;
 
 namespace collections
 {
+    
+    /// <summary>
+    /// Create a custom equality and hash code comparer for string types.  This custom comparer is used with the
+    /// Dictionary type.  EqualityComparer implements the generic IEqualityComparer&ltT&gt; interface and non-generic
+    /// IEqualityComparer interface.
+    /// </summary>
+    internal class CaseInsensitiveEqualityComparer : EqualityComparer<string>
+    {
+        /// <summary>
+        /// Override the Equals() method that compares two strings.  Before comparing their values, turn their
+        /// characters into lowercase.
+        /// </summary>
+        /// <param name="x">The first string to compare.</param>
+        /// <param name="y">The second string to compare.</param>
+        /// <returns>
+        /// <code>true</code> if the two strings lowercase values are equal, <code>false</code> otherwise.
+        /// </returns>
+        public override bool Equals(string x, string y)
+        {
+            if (x == null || y == null) return false;
+            
+            // This can be rewritten string.Equals(x.ToLower(), y.ToLower())
+            return string.Equals(x, y, StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        /// <summary>
+        /// Get the hash code of a strings lowercase value.
+        /// </summary>
+        /// <param name="obj">A string that will be treated in a case insensitive manner.</param>
+        /// <returns>The hash code of a strings lowercase value.</returns>
+        public override int GetHashCode(string obj)
+        {
+            return obj.ToLower().GetHashCode();
+        }
+    }
+    
     public static class DataStructures
     {
         public static void Execute()
@@ -52,6 +89,14 @@ namespace collections
             int silkIndex = yarns.BinarySearch("silk");
             Assert(silkIndex == 4);
             
+            // ReadOnlyCollection<T> is a proxy to a collection.  It creates a read-only view of that collection.
+            ReadOnlyCollection<string> readOnlyYarns = new ReadOnlyCollection<string>(yarns);
+
+            for (var i = 0; i < yarns.Count; i++)
+            {
+                Assert(readOnlyYarns[i] == yarns[i]);
+            }
+
             // Before C# introduced generics, a class called ArrayList was used for list data structures.  It isn't
             // recommended to use this class anymore.
             ArrayList arrayList = new ArrayList(2);
@@ -202,6 +247,31 @@ namespace collections
             it.MoveNext();
             Assert(it.Current.Value.Equals("Publish Haskell Applicatives Article to jarombek.com"));
             it.Dispose();
+            
+            // Dictionaries can be searched with custom equality logic.
+            var animals = new Dictionary<string, string>();
+            animals["dotty"] = "horse";
+            animals["lily"] = "bear";
+            
+            // Dictionary string keys are case sensitive by default.
+            Assert(animals.ContainsKey("dotty"));
+            Assert(!animals.ContainsKey("Dotty"));
+
+            var caseInsensitiveEqualityComparer = new CaseInsensitiveEqualityComparer();
+            var animalsCaseInsensitive = new Dictionary<string, string>(animals, caseInsensitiveEqualityComparer);
+            
+            // With the custom equality comparer, dictionary string keys are case insensitive.
+            Assert(animalsCaseInsensitive.ContainsKey("dotty"));
+            Assert(animalsCaseInsensitive.ContainsKey("Dotty"));
+
+            // Data structures can be sorted with a custom comparator as well.
+            // Create yarn objects with C# object literal notation.
+            var yarn1 = new { id = 1, fiber = "Polyester", color = "Pitter Patter", yards = 220 };
+            var yarn2 = new { id = 2, fiber = "Polyester", color = "Baby Lilac", yards = 220 };
+            var yarn3 = new { id = 3, fiber = "Polyester", color = "Vanilla", yards = 70 };
+            
+            var yarnList = new List<object> {yarn1, yarn2, yarn3};
+            yarnList.Sort();
         }
     }
 }
