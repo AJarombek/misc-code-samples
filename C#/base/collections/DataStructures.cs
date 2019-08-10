@@ -1,6 +1,6 @@
 /**
  * Investigate data structures in C# and the .NET Framework
- * Sources: [C# 7.0 In a Nutshell: Page 322-]
+ * Sources: [C# 7.0 In a Nutshell: Page 322-350]
  * Author: Andrew Jarombek
  * Date: 8/4/2019
  */
@@ -49,6 +49,28 @@ namespace collections
         public override int GetHashCode(string obj)
         {
             return obj.ToLower().GetHashCode();
+        }
+    }
+
+    /// <summary>
+    /// Create a custom comparator between two types.  This comparator is primarily used for sorting a sortable
+    /// data structure such as a list.  Comparer&lt;T&gt; implements IComparer and IComparer&lt;T&gt;, which have a
+    /// single compare() method.
+    /// </summary>
+    internal class YarnColorComparer : Comparer<dynamic>
+    {
+        /// <summary>
+        /// Compares the values of two objects whose types aren't known until runtime.  In practice, the type is always
+        /// an object literal representing a ball of yarn.  The two balls of yarn are compared on their 'color'
+        /// property, which is a string.
+        /// </summary>
+        /// <param name="x">The first dynamic object (representing yarn) to compare.</param>
+        /// <param name="y">The second dynamic object (representing yarn) to compare.</param>
+        /// <returns>0 if the two objects are equal, 1 if x is greater than y, -1 if x is less than y.</returns>
+        public override int Compare(dynamic x, dynamic y)
+        {
+            if (Equals(x, y)) return 0;
+            return x.color.CompareTo(y.color);
         }
     }
     
@@ -271,7 +293,21 @@ namespace collections
             var yarn3 = new { id = 3, fiber = "Polyester", color = "Vanilla", yards = 70 };
             
             var yarnList = new List<object> {yarn1, yarn2, yarn3};
-            yarnList.Sort();
+
+            // Sorting an object literal without a custom comparator throws an exception.
+            try
+            {
+                yarnList.Sort();
+                Assert(false);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Assert(true);
+            }
+
+            // Using the custom comparator sorts the object literals by their 'color' string.
+            yarnList.Sort(new YarnColorComparer());
+            Assert(yarnList[0].Equals(yarn2) && yarnList[1].Equals(yarn1) && yarnList[2].Equals(yarn3));
         }
     }
 }

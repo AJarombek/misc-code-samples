@@ -6,6 +6,7 @@
  */
 
 using System;
+using System.Collections;
 using static System.Diagnostics.Debug;
 
 namespace BasicFrameworkTypes
@@ -237,6 +238,19 @@ namespace BasicFrameworkTypes
             // == is overloaded for strings to check for value equality.  I would argue this is
             // a confusing aspect of operator overloading, and is one of the main reasons Java doesn't allow it.
             Assert(day == dayAgain && myday == mydayAgain);
+            
+            // Structural equality (value equality) can be applied to arrays with the IStructuralEquatable interface.
+            // This interface uses the same equality methodology which is used for structs where all their properties
+            // are checked for equality.
+            string[] strings = { "went", "kayaking", "today" };
+            string[] strings2 = { "went", "kayaking", "today" };
+            
+            // False for normal reference equality.
+            Assert(!strings.Equals(strings2));
+
+            // True for value equality.
+            IStructuralEquatable seStrings = strings;
+            Assert(seStrings.Equals(strings2, StringComparer.CurrentCulture));
         }
     }
 }
