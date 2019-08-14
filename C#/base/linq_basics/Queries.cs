@@ -5,13 +5,76 @@
  * Date: 8/9/2019
  */
 
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using static System.Diagnostics.Debug;
+
 namespace linq_basics
 {
     public static class Queries
     {
         public static void Execute()
         {
+            // LINQ (which stands for Language Integrated Query) enabled querying over enumerable data types and
+            // remote data.  LINQ takes in an input sequence and produces an output sequence.  The following dictionary
+            // is an example of an input sequence. 
+            Dictionary<string, int> deerSpottedToday = new Dictionary<string, int>
+            {
+                {"Mianus River Park", 2},
+                {"Cognewaugh Road", 1}
+            };
+
+            // A LINQ query can be created with System.Linq.Enumerable.Where.  It takes an input sequence and a lambda
+            // function as arguments.  The lambda function is called for each item in the input sequence.  If the result
+            // of the lambda function is 'true', the item is passed onto the output sequence.
+            IEnumerable<KeyValuePair<string, int>> multipleDeer = Enumerable.Where(
+                deerSpottedToday, 
+                spot => spot.Value > 1
+            );
+            Assert(multipleDeer.Count() == 1);
+
+            // Query operators are also extension methods for IEnumerable.  An extension method is one added to an
+            // existing type without modifying the existing types definition.  In the example of query operators,
+            // methods such as Where() are written in System.Linq.Enumerable but extended onto the
+            // System.Collections.Generic.IEnumerable<T> interface.  Since Dictionary<K, V> implements IEnumerable<T>,
+            // it can use the Where() extension method.
+            var singleDeer = deerSpottedToday.Where(spot => spot.Value == 1);
+            Assert(singleDeer.Count() == 1);
+
+            // The previous two Linq examples used 'fluent syntax', which is made up of chained method calls.  C# also
+            // provides a 'query syntax' which uses native keywords to build queries.  At first glance query syntax has
+            // noticeable similarities to SQL.
+            var anyDeer = from spottedDeer in deerSpottedToday 
+                          where spottedDeer.Value >= 1 
+                          select spottedDeer;
+            Assert(anyDeer.Count() == 2);
+
+            // Walks I've gone on the past week as my knee recovers.  I'll use this array in the upcoming Linq queries.
+            double[] walksPastWeek = { 3.5, 2.48, 3.6, 3.98, 3.59, 1.74, 1.54 };
+
+            // Linq query with additional OrderBy() and Select() query operator methods.
+            // Select() is basically a map() function.
+            var greaterThanTwoMiles = walksPastWeek.Where(miles => miles > 2)
+                                                   .OrderBy(miles => miles)
+                                                   .Select(miles => Math.Round(miles));
             
+            Assert(greaterThanTwoMiles.Count() == 5);
+            Assert(greaterThanTwoMiles.First() == 2);
+
+            // The same Linq query written in fluent syntax above can be rewritten in query syntax:
+            var greaterThanTwoMilesAgain = from distance in walksPastWeek
+                where distance > 2
+                orderby distance
+                select Math.Round(distance);
+            
+            Assert(greaterThanTwoMilesAgain.Count() == 5);
+            Assert(greaterThanTwoMilesAgain.First() == 2);
+
+            // Additional Linq queries can be executed on the result of previous queries.
+            var greaterThanTwoMilesDesc = greaterThanTwoMiles.OrderByDescending(miles => miles);
+            
+            Assert(greaterThanTwoMilesDesc.First() == 4);
         }
     }
 }
