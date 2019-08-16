@@ -75,6 +75,68 @@ namespace linq_basics
             var greaterThanTwoMilesDesc = greaterThanTwoMiles.OrderByDescending(miles => miles);
             
             Assert(greaterThanTwoMilesDesc.First() == 4);
+
+            // OrderByDescending is also supported by query syntax.
+            var greaterThanTwoMilesDescAgain = from miles in greaterThanTwoMiles 
+                orderby miles descending 
+                select miles;
+            
+            Assert(greaterThanTwoMilesDescAgain.First() == 4);
+
+            // Take the first two elements from the sorted enumerable sequence of walks.
+            var twoLongestWalks = walksPastWeek.OrderByDescending(miles => miles).Take(2);
+            Assert(twoLongestWalks.First() == 3.98 && twoLongestWalks.Last() == 3.6);
+            Assert(twoLongestWalks.ElementAt(1) == twoLongestWalks.Last());
+            
+            // There are one or more walks in the sequence.
+            Assert(twoLongestWalks.Any());
+            
+            // Query operators aren't executed when constructed.  They are executed when enumerated.  This can be
+            // proved by altering a data structure after creating a LINQ query for it.
+            var deerSpottedThisWeek = deerSpottedToday;
+
+            var deerQuery = from deerSpotted in deerSpottedThisWeek 
+                where deerSpotted.Value > 1 
+                select deerSpotted;
+            
+            // Right now, there is only one location where more than one deer was spotted.
+            Assert(deerQuery.Count() == 1);
+            
+            // I saw another deer on Cognewaugh Road today.
+            deerSpottedThisWeek["Cognewaugh Road"] = 2;
+            
+            // Due to delayed execution, now there are two locations where more than one deer was spotted.
+            Assert(deerQuery.Count() == 2);
+            
+            // You can prohibit delayed execution by immediately assigning a query to a list.
+            var deerQueryList = deerQuery.ToList();
+            
+            Assert(deerQueryList.Count == 2);
+
+            // I didn't see a million deer in my dreams, although I wouldn't complain.
+            deerSpottedThisWeek["My Dreams"] = 1_000_000;
+            
+            // The count in the list is still 2, while the count from the original query is now 3.
+            Assert(deerQueryList.Count == 2);
+            Assert(deerQuery.Count() == 3);
+
+            deerSpottedThisWeek.Remove("My Dreams");
+            Assert(deerQuery.Count() == 2);
+            
+            // If the values of lexical scope variables referenced in a query change before execution,
+            // the query will honor that change.
+            int numOfDeer = 2;
+            var sameDeerQuery = from deerSpotting in deerSpottedThisWeek
+                where deerSpotting.Value >= numOfDeer
+                select deerSpotting;
+            
+            // When numOfDeer is 2, there are two locations that match the query.
+            Assert(sameDeerQuery.Count() == 2);
+
+            numOfDeer = 3;
+            
+            // When numOfDeer is 3, there are no locations that match the query.
+            Assert(sameDeerQuery.Count() == 0);
         }
     }
 }
