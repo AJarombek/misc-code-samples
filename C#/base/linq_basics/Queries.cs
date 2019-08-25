@@ -1,6 +1,6 @@
 /**
  * Investigate LINQ basics in the .NET Framework
- * Sources: [C# 7.0 In a Nutshell: Page 351-]
+ * Sources: [C# 7.0 In a Nutshell: Page 351-379]
  * Author: Andrew Jarombek
  * Date: 8/9/2019
  */
@@ -45,9 +45,10 @@ namespace linq_basics
             // The previous two Linq examples used 'fluent syntax', which is made up of chained method calls.  C# also
             // provides a 'query syntax' which uses native keywords to build queries.  At first glance query syntax has
             // noticeable similarities to SQL.
-            var anyDeer = from spottedDeer in deerSpottedToday 
-                          where spottedDeer.Value >= 1 
-                          select spottedDeer;
+            var anyDeer = 
+                from spottedDeer in deerSpottedToday 
+                where spottedDeer.Value >= 1 
+                select spottedDeer;
             Assert(anyDeer.Count() == 2);
 
             // Walks I've gone on the past week as my knee recovers.  I'll use this array in the upcoming Linq queries.
@@ -63,7 +64,8 @@ namespace linq_basics
             Assert(greaterThanTwoMiles.First() == 2);
 
             // The same Linq query written in fluent syntax above can be rewritten in query syntax:
-            var greaterThanTwoMilesAgain = from distance in walksPastWeek
+            var greaterThanTwoMilesAgain = 
+                from distance in walksPastWeek
                 where distance > 2
                 orderby distance
                 select Math.Round(distance);
@@ -77,7 +79,8 @@ namespace linq_basics
             Assert(greaterThanTwoMilesDesc.First() == 4);
 
             // OrderByDescending is also supported by query syntax.
-            var greaterThanTwoMilesDescAgain = from miles in greaterThanTwoMiles 
+            var greaterThanTwoMilesDescAgain = 
+                from miles in greaterThanTwoMiles 
                 orderby miles descending 
                 select miles;
             
@@ -95,7 +98,8 @@ namespace linq_basics
             // proved by altering a data structure after creating a LINQ query for it.
             var deerSpottedThisWeek = deerSpottedToday;
 
-            var deerQuery = from deerSpotted in deerSpottedThisWeek 
+            var deerQuery = 
+                from deerSpotted in deerSpottedThisWeek 
                 where deerSpotted.Value > 1 
                 select deerSpotted;
             
@@ -126,7 +130,8 @@ namespace linq_basics
             // If the values of lexical scope variables referenced in a query change before execution,
             // the query will honor that change.
             int numOfDeer = 2;
-            var sameDeerQuery = from deerSpotting in deerSpottedThisWeek
+            var sameDeerQuery = 
+                from deerSpotting in deerSpottedThisWeek
                 where deerSpotting.Value >= numOfDeer
                 select deerSpotting;
             
@@ -200,8 +205,55 @@ namespace linq_basics
             var thirdWalkTicks = "(Pine Hill Road, Mianus River Park, 637022016000000000)";
             
             Assert(walkQueryContinuation.Count() == 3);
-            Console.WriteLine(walkQueryContinuation.First().Equals(firstWalkTicks));
-            Console.WriteLine(walkQueryContinuation.Last().Equals(thirdWalkTicks));
+            Assert(walkQueryContinuation.First().ToString().Equals(firstWalkTicks));
+            Assert(walkQueryContinuation.Last().ToString().Equals(thirdWalkTicks));
+            
+            // The same query can be written as a wrapped query.
+            var walkQueryWrapped =
+                from walk in (
+                    from walk2 in trailsWalkedThisWeekend
+                    select (TrailName: walk2.TrailName, Park: walk2.Park, Date: walk2.Date.Ticks)
+                )
+                where walk.TrailName.Contains("Road")
+                orderby walk.Date
+                select walk;
+            
+            Assert(walkQueryWrapped.Count() == 3);
+            Assert(walkQueryWrapped.First().ToString().Equals(firstWalkTicks));
+            Assert(walkQueryWrapped.Last().ToString().Equals(thirdWalkTicks));
+            
+            // You can also create new anonymous types in a query.
+            var walkTimes =
+                from walk in trailsWalkedThisWeekend
+                select new
+                {
+                    Date = walk.Date,
+                    Name = walk.TrailName.Replace("Trail", "").Replace("Road", "").Trim()
+                }
+                into walkTime
+                orderby walkTime.Date descending 
+                select walkTime;
+
+            var firstWalkTime = walkTimes.First();
+            
+            Assert(firstWalkTime.Date.ToString() == "8/25/2019 12:00:00 AM");
+            Assert(firstWalkTime.Name == "Red Maple");
+            
+            // Instead of using 'select ... into' to create a new anonymous type, the 'let' keyword can be used.
+            var walkTimesAgain =
+                from walk in trailsWalkedThisWeekend
+                let walkTime = new
+                {
+                    Date = walk.Date,
+                    Name = walk.TrailName.Replace("Trail", "").Replace("Road", "").Trim()
+                }
+                orderby walkTime.Date descending 
+                select walkTime;
+            
+            firstWalkTime = walkTimesAgain.First();
+            
+            Assert(firstWalkTime.Date.ToString() == "8/25/2019 12:00:00 AM");
+            Assert(firstWalkTime.Name == "Red Maple");
 
             // Demonstrate how the GroupBy operator works.  It creates an IGrouping collection where each element is
             // all the items that match the key selector.
