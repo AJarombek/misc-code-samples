@@ -9,6 +9,5 @@ package basic_types;
 public class Main {
     public static void main(String... args) {
         Convert.execute();
-        Equality.execute();
     }
 }

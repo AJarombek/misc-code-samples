@@ -137,6 +137,86 @@ namespace linq_basics
             
             // When numOfDeer is 3, there are no locations that match the query.
             Assert(sameDeerQuery.Count() == 0);
+
+            var trailsWalkedThisWeekend = new [] 
+            {
+                (TrailName: "Main Road", Park: "Mianus River Park", Date: new DateTime(2019, 8, 23)),
+                (TrailName: "Swamp Trail", Park: "Mianus River Park", Date: new DateTime(2019, 8, 23)),
+                (TrailName: "Peak Trail", Park: "Mianus River Park", Date: new DateTime(2019, 8, 23)),
+                (TrailName: "Laurel Trail", Park: "Mianus River Park", Date: new DateTime(2019, 8, 23)),
+                (TrailName: "Main Road", Park: "Mianus River Park", Date: new DateTime(2019, 8, 24)),
+                (TrailName: "Dam Trail", Park: "Mianus River Park", Date: new DateTime(2019, 8, 24)),
+                (TrailName: "Cave Trail", Park: "Mianus River Park", Date: new DateTime(2019, 8, 24)),
+                (TrailName: "Pine Hill Road", Park: "Mianus River Park", Date: new DateTime(2019, 8, 24)),
+                (TrailName: "Fisherman's Loop Trail", Park: "Mianus River Park", Date: new DateTime(2019, 8, 24)),
+                (TrailName: "Cabin Trail", Park: "Mianus River Park", Date: new DateTime(2019, 8, 24)),
+                (TrailName: "Swingset Trail", Park: "Mianus River Park", Date: new DateTime(2019, 8, 24)),
+                (TrailName: "GLT Trail", Park: "Babcock Preserve", Date: new DateTime(2019, 8, 24)),
+                (TrailName: "Red Maple Trail", Park: "Babcock Preserve", Date: new DateTime(2019, 8, 24)),
+                (TrailName: "White Oak Trail", Park: "Babcock Preserve", Date: new DateTime(2019, 8, 24)),
+                (TrailName: "Yellow Birch Trail", Park: "Babcock Preserve", Date: new DateTime(2019, 8, 24)),
+                (TrailName: "Red Maple Trail", Park: "Babcock Preserve", Date: new DateTime(2019, 8, 25)),
+                (TrailName: "Yellow Birch Trail", Park: "Babcock Preserve", Date: new DateTime(2019, 8, 25))
+            };
+
+            // Demonstrate subqueries with fluent syntax ...
+            var timesWalkedMostRecentTrail = trailsWalkedThisWeekend
+                .Where(walk => walk.TrailName.Equals(trailsWalkedThisWeekend
+                                   .OrderByDescending(subWalk => subWalk.Date).First().TrailName))
+                .OrderBy(walk => walk.Date);
+
+            // ... and again with query syntax.  Both queries produce the same result sequence.
+            var timesWalkedMostRecentTrailAgain =
+                from walk in trailsWalkedThisWeekend
+                where walk.TrailName ==
+                      (from subWalk in trailsWalkedThisWeekend 
+                          orderby subWalk.Date descending 
+                          select subWalk).First()
+                      .TrailName
+                orderby walk.Date
+                select walk;
+
+            var firstTimeWalked = "(Red Maple Trail, Babcock Preserve, 8/24/2019 12:00:00 AM)";
+            var lastTimeWalked = "(Red Maple Trail, Babcock Preserve, 8/25/2019 12:00:00 AM)";
+            
+            // Prove that both queries with subqueries produce the same result.
+            Assert(timesWalkedMostRecentTrail.Count() == 2);
+            Assert(timesWalkedMostRecentTrail.First().ToString() == firstTimeWalked);
+            Assert(timesWalkedMostRecentTrail.Last().ToString() == lastTimeWalked);
+            Assert(timesWalkedMostRecentTrailAgain.Count() == 2);
+            Assert(timesWalkedMostRecentTrailAgain.First().ToString() == firstTimeWalked);
+            Assert(timesWalkedMostRecentTrailAgain.Last().ToString() == lastTimeWalked);
+            
+            // In query syntax, you can chain two queries together with the 'into' keyword.
+            var walkQueryContinuation =
+                from walk in trailsWalkedThisWeekend
+                select (TrailName: walk.TrailName, Park: walk.Park, Date: walk.Date.Ticks)
+                into walk2
+                where walk2.TrailName.Contains("Road") 
+                orderby walk2.Date
+                select walk2;
+
+            var firstWalkTicks = "(Main Road, Mianus River Park, 637021152000000000)";
+            var thirdWalkTicks = "(Pine Hill Road, Mianus River Park, 637022016000000000)";
+            
+            Assert(walkQueryContinuation.Count() == 3);
+            Console.WriteLine(walkQueryContinuation.First().Equals(firstWalkTicks));
+            Console.WriteLine(walkQueryContinuation.Last().Equals(thirdWalkTicks));
+
+            // Demonstrate how the GroupBy operator works.  It creates an IGrouping collection where each element is
+            // all the items that match the key selector.
+            var groupedWalks = trailsWalkedThisWeekend.GroupBy(
+                trail => trail.TrailName
+            );
+
+            foreach (IGrouping<string,(string TrailName, string Park, DateTime Date)> grouping in groupedWalks)
+            {
+                Console.WriteLine($"Key: {grouping.Key}");
+                foreach ((string TrailName, string Park, DateTime Date) tuple in grouping)
+                {
+                    Console.WriteLine($"    Item: {tuple.TrailName}, {tuple.Park}, {tuple.Date.ToString()}");
+                }
+            }
         }
     }
 }
