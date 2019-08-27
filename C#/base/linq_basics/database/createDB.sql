@@ -2,6 +2,10 @@
 -- Author: Andrew Jarombek
 -- Date: 8/25/2019
 
+CREATE DATABASE LinqDemo;
+
+USE LinqDemo;
+
 CREATE TABLE Language (
     Name VARCHAR(31) NOT NULL PRIMARY KEY,
     ReleaseYear INT NOT NULL 
@@ -118,3 +122,45 @@ INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('Java', 2016, 129
 INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('Java', 2017, 12113);
 INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('Java', 2018, 4769);
 INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('Java', 2019, 1390);
+
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('JSON', 2014, 0);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('JSON', 2015, 32);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('JSON', 2016, 820);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('JSON', 2017, 1019);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('JSON', 2018, 364);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('JSON', 2019, 604);
+
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('CSS', 2014, 0);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('CSS', 2015, 0);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('CSS', 2016, 1223);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('CSS', 2017, 1654);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('CSS', 2018, 594);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('CSS', 2019, 563);
+
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('TypeScript', 2014, 0);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('TypeScript', 2015, 0);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('TypeScript', 2016, 0);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('TypeScript', 2017, 133);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('TypeScript', 2018, 2375);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('TypeScript', 2019, 361);
+
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('PHP', 2014, 0);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('PHP', 2015, 0);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('PHP', 2016, 5433);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('PHP', 2017, 3670);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('PHP', 2018, 356);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('PHP', 2019, 357);
+
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('SQL', 2014, 0);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('SQL', 2015, 325);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('SQL', 2016, 942);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('SQL', 2017, 812);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('SQL', 2018, 1392);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('SQL', 2019, 380);
+
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('XML', 2014, 0);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('XML', 2015, 42);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('XML', 2016, 2646);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('XML', 2017, 5815);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('XML', 2018, 111);
+INSERT INTO CodeWritten (Language, Year, LinesWritten) VALUES ('XML', 2019, 12);
