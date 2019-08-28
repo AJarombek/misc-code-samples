@@ -18,6 +18,7 @@ namespace BasicFrameworkTypes
             ConvertTypes.Execute();
             Numbers.Execute();
             Enums.Execute();
+            Unicode.Execute();
             OS.Execute();
         }
     }
