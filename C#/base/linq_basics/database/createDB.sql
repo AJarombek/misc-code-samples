@@ -2,22 +2,31 @@
 -- Author: Andrew Jarombek
 -- Date: 8/25/2019
 
+USE master;
+
+DROP DATABASE IF EXISTS LinqDemo;
+GO
+
 CREATE DATABASE LinqDemo;
+GO
 
 USE LinqDemo;
 
+DROP TABLE IF EXISTS Language;
+DROP TABLE IF EXISTS CodeWritten;
+
 CREATE TABLE Language (
     Name VARCHAR(31) NOT NULL PRIMARY KEY,
-    ReleaseYear INT NOT NULL 
+    ReleaseYear INT NOT NULL
 );
 
 CREATE TABLE CodeWritten (
-    ID INT NOT NULL PRIMARY KEY,
+    ID INT IDENTITY(1, 1) NOT NULL PRIMARY KEY,
     Language VARCHAR(31) NOT NULL,
     Year INT NOT NULL,
     LinesWritten INT NOT NULL,
-    CONSTRAINT CodeWrittenLanguageFK 
-        FOREIGN KEY (Language) REFERENCES Language(Name) ON DELETE CASCADE 
+    CONSTRAINT CodeWrittenLanguageFK
+        FOREIGN KEY (Language) REFERENCES Language(Name) ON DELETE CASCADE
 );
 
 INSERT INTO Language (Name, ReleaseYear) VALUES ('Python', 1991);

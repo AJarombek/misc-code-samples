@@ -2,7 +2,7 @@
 # Author: Andrew Jarombek
 # Date: 8/27/2019
 
-FROM mcr.microsoft.com/mssql/server:2017-latest
+FROM mcr.microsoft.com/mssql/server:2017-latest-ubuntu
 
 LABEL maintainer="andrew@jarombek.com" \
       version="0.0.1" \
@@ -14,4 +14,5 @@ ENV SA_PASSWORD LinqDemo1
 COPY . /src
 WORKDIR /src
 
+EXPOSE 1433
 CMD ["bash", "setup-db.sh"]
