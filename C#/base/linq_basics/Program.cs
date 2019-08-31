@@ -12,6 +12,7 @@ namespace linq_basics
         static void Main(string[] args)
         {
             Queries.Execute();
+            InterpretedQueries.Execute();
         }
     }
 }

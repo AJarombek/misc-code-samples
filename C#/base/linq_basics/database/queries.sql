@@ -4,4 +4,5 @@
 
 USE LinqDemo
 
-SELECT * FROM language;
+SELECT * FROM Language;
+SELECT * FROM CodeWritten;
