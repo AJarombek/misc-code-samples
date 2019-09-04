@@ -269,6 +269,17 @@ namespace linq_basics
                     Console.WriteLine($"    Item: {tuple.TrailName}, {tuple.Park}, {tuple.Date.ToString()}");
                 }
             }
+
+            var fromMyHeart = "she deserves whatever will bring her joy and happiness";
+
+            var deserves =
+                from word in fromMyHeart.Split(" ").Select((item, index) => new {item, index})
+                where word.index > 5 && word.index % 2 == 0
+                select word.item;
+            
+            Assert(deserves.First() == "joy");
+            Assert(deserves.Last() == "happiness");
+            Assert(deserves.Count() == 2);
         }
     }
 }

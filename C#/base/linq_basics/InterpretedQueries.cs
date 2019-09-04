@@ -92,6 +92,30 @@ namespace linq_basics
                 // [SQL Lines 16-18]
                 var newestLanguage = context.LanguageSet.OrderByDescending(language => language.ReleaseYear).First();
                 Assert(newestLanguage.Name == "HCL");
+
+                var mostLinesCodedThisYear = 
+                    from written in context.CodeWrittenSet
+                    where written.Year == 2019
+                    orderby written.LinesWritten descending
+                    select written;
+
+                // [SQL Lines 21-23]
+                var languageCodedMostThisYear = mostLinesCodedThisYear.First();
+                
+                // [SQL Lines 26-28]
+                Assert(languageCodedMostThisYear.Language == "Python");
+                // [SQL Lines 31-35]
+                Assert(languageCodedMostThisYear.LanguageReference.ReleaseYear == 1991);
+                
+                // Unlike local queries which return an instance of IEnumerable<T>, interpreted queries return an
+                // instance of IQueryable<T>.
+                // [SQL Line 38]
+                IQueryable<CodeWritten> javaCodeWritten =
+                    from written in context.CodeWrittenSet
+                    where written.Language == "Java"
+                    select written;
+                
+                Assert(javaCodeWritten.Count() == 6);
             }
         }
     }
