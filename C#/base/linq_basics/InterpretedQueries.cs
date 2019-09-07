@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using static System.Diagnostics.Debug;
 
@@ -69,7 +70,7 @@ namespace linq_basics
     
     public class InterpretedQueries
     {
-        public static void Execute()
+        public static void ExecuteBasics()
         {
             using (var context = new LanguageContext())
             {
@@ -106,16 +107,95 @@ namespace linq_basics
                 Assert(languageCodedMostThisYear.Language == "Python");
                 // [SQL Lines 31-35]
                 Assert(languageCodedMostThisYear.LanguageReference.ReleaseYear == 1991);
-                
+            }
+        }
+
+        public static void ExecuteLocalInterpretedComparison()
+        {
+            using (var context = new LanguageContext())
+            {
                 // Unlike local queries which return an instance of IEnumerable<T>, interpreted queries return an
                 // instance of IQueryable<T>.
                 // [SQL Line 38]
-                IQueryable<CodeWritten> javaCodeWritten =
+                IQueryable<CodeWritten> sqlJavaCodeWritten =
                     from written in context.CodeWrittenSet
                     where written.Language == "Java"
                     select written;
                 
-                Assert(javaCodeWritten.Count() == 6);
+                // IQueryable<T> extends the IEnumerable<T> interface, so interpreted queries can be assigned to type
+                // IEnumerable<T> without error.
+                IEnumerable<CodeWritten> sqlJavaCodeWrittenAgain =
+                    from written in context.CodeWrittenSet
+                    where written.Language == "Java"
+                    select written;
+                
+                Assert(sqlJavaCodeWritten.Count() == 6);
+                Assert(sqlJavaCodeWrittenAgain.Count() == 6);
+                
+                // Create a local list with the same data on Java code usage as the SQL Server database.
+                List<CodeWritten> localJavaCodeWrittenList = new List<CodeWritten>
+                {
+                    new CodeWritten {Id = 67, Language = "Java", LinesWritten = 4282, Year = 2014},
+                    new CodeWritten {Id = 68, Language = "Java", LinesWritten = 1585, Year = 2015},
+                    new CodeWritten {Id = 69, Language = "Java", LinesWritten = 12962, Year = 2016},
+                    new CodeWritten {Id = 70, Language = "Java", LinesWritten = 12113, Year = 2017},
+                    new CodeWritten {Id = 71, Language = "Java", LinesWritten = 4769, Year = 2018},
+                    new CodeWritten {Id = 72, Language = "Java", LinesWritten = 1390, Year = 2019}
+                };
+
+                // Prove the local query returns an instance of IEnumerable<T>.
+                IEnumerable<CodeWritten> localJavaCodeWritten = localJavaCodeWrittenList.Select(cw => cw);
+                
+                Assert(localJavaCodeWritten.Count() == 6);
+                
+                // Assigning the local query to type IQueryable<T> results in a compile time error.
+                // IQueryable<CodeWritten> localJavaCodeWritten = localJavaCodeWrittenList.Select(cw => cw);
+                
+                // Local queries use delegates while interpreted queries use expression trees.  Both appear as lambda
+                // functions usually, however you can also explicitly type them.
+                var localBestYear = localJavaCodeWritten.First(cw => cw.Year == 2016);
+                var sqlBestYear = sqlJavaCodeWritten.First(cw => cw.Year == 2016);
+                
+                Assert(localBestYear.LinesWritten == sqlBestYear.LinesWritten);
+                Assert(localBestYear.LinesWritten == 12962);
+                
+                // ... Now explicitly typed
+                Func<CodeWritten, bool> predicateYear2016 = cw => cw.Year == 2016;
+                localBestYear = localJavaCodeWritten.First(predicateYear2016);
+
+                Expression<Func<CodeWritten, bool>> expressionYear2016 = cw => cw.Year == 2016;
+                sqlBestYear = sqlJavaCodeWritten.First(expressionYear2016);
+
+                Assert(localBestYear.LinesWritten == sqlBestYear.LinesWritten);
+                Assert(localBestYear.LinesWritten == 12962);
+                
+                // Using an Expression in place of a Func for a local query causes a compilation error.
+                // localBestYear = localJavaCodeWritten.First(expressionYear2016);
+                
+                // ... However for an interpreted query a Func can be used in place of an Expression.
+                sqlBestYear = sqlJavaCodeWritten.First(predicateYear2016);
+                Assert(sqlBestYear.LinesWritten == 12962);
+                
+                // An Expression<> can be converted to a Func<> with the Compile() method.
+                localBestYear = localJavaCodeWritten.First(expressionYear2016.Compile());
+                Assert(localBestYear.LinesWritten == 12962);
+                
+                // Or AsQueryable() can be used to wrap a local query in an instance of IQueryable<T>
+                localBestYear = localJavaCodeWritten.AsQueryable().First(expressionYear2016);
+                Assert(localBestYear.LinesWritten == 12962);
+            }
+        }
+
+        public static void ExecuteAdvancedQueries()
+        {
+            using (var context = new LanguageContext())
+            {
+                var jLanguages =
+                    from codeWritten in context.CodeWrittenSet
+                    where EF.Functions.Like(codeWritten.Language, "J%") 
+                    select codeWritten;
+                
+                Assert(jLanguages.Count() == 18);
             }
         }
     }

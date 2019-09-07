@@ -36,3 +36,5 @@ ORDER BY LinesWritten DESC;
 
 -- Get all the code written statistics for the Java programming language.
 SELECT * FROM CodeWritten WHERE Language = 'Java';
+
+SELECT * FROM CodeWritten WHERE Language LIKE 'J%';
