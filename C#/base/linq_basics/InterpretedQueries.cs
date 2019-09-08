@@ -190,12 +190,72 @@ namespace linq_basics
         {
             using (var context = new LanguageContext())
             {
+                // Use EF.Functions.Like to perform a SQL style 'LIKE' operation to match a pattern.
+                // [SQL Line 41]
                 var jLanguages =
                     from codeWritten in context.CodeWrittenSet
                     where EF.Functions.Like(codeWritten.Language, "J%") 
                     select codeWritten;
                 
                 Assert(jLanguages.Count() == 18);
+
+                // Using a 'where' clause followed by a Contains() on a collection/array
+                // is the same as an 'IN' SQL clause.
+                // [SQL Line 44]
+                var javaLanguagesArray = new [] {"Java", "JavaScript"};
+                var javaLanguages = 
+                    from codeWritten in context.CodeWrittenSet
+                    where javaLanguagesArray.Contains(codeWritten.Language)
+                    select codeWritten;
+                
+                Assert(javaLanguages.Count() == 12);
+
+                // Perform the equivalent of an INNER JOIN with a select clause.
+                // [SQL Lines 46-51]
+                var highLinesWrittenJoin =
+                    from written in context.CodeWrittenSet
+                    where written.LinesWritten > 10000
+                    orderby written.LinesWritten descending 
+                    select new
+                    {
+                        written.LinesWritten,
+                        written.LanguageReference.Name,
+                        written.LanguageReference.ReleaseYear
+                    };
+                
+                Assert(highLinesWrittenJoin.Count() == 5);
+
+                var mostLinesWrittenEver = new {Name = "JavaScript", ReleaseYear = 1995, LinesWritten = 16414};
+                Assert(highLinesWrittenJoin.First().LinesWritten == mostLinesWrittenEver.LinesWritten);
+
+                // Query the languages and return just the names in alphabetical order.
+                var languageNames =
+                    from language in context.LanguageSet
+                    orderby language.Name
+                    select language.Name;
+
+                Assert(languageNames.First() == "Bash" && languageNames.Last() == "YAML");
+
+                // Query the code written statistics and group by the language name.  Retrieve the sum of the
+                // lines of code written for each language.
+                var languageTotalStats =
+                    from codeWritten in context.CodeWrittenSet
+                    orderby codeWritten.Language
+                    group codeWritten.LinesWritten by codeWritten.Language
+                    into totals 
+                    select totals.Sum();
+                
+                Assert(languageTotalStats.First() == 3288);
+
+                // Zip the two previous queries to associate the language with the total statistics
+                var languagesZipped = languageNames.ToArray().Zip(languageTotalStats.ToArray(), (name, total) => $"{name} = {total}");
+
+                foreach (var languageTotals in languagesZipped)
+                {
+                    Console.WriteLine(languageTotals);
+                }
+                
+                Assert(languagesZipped.First() == "Bash = 3288");
             }
         }
     }

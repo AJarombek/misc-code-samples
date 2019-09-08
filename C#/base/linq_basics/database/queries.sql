@@ -37,4 +37,16 @@ ORDER BY LinesWritten DESC;
 -- Get all the code written statistics for the Java programming language.
 SELECT * FROM CodeWritten WHERE Language = 'Java';
 
+-- Get all the code written statistics for languages that start with the letter J.
 SELECT * FROM CodeWritten WHERE Language LIKE 'J%';
+
+-- Get the code written statistics for a group of languages.
+SELECT * FROM CodeWritten WHERE Language IN ('Java', 'JavaScript');
+
+-- Perform an inner join to get the language statistics each time a language broke 10,000 lines of code in a year.
+SELECT cw.LinesWritten, lang.Name, lang.ReleaseYear
+FROM CodeWritten AS cw
+    INNER JOIN Language AS lang
+        ON cw.Language = lang.Name
+WHERE cw.LinesWritten > 10000
+ORDER BY cw.LinesWritten DESC;
