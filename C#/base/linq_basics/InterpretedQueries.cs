@@ -256,6 +256,35 @@ namespace linq_basics
                 }
                 
                 Assert(languagesZipped.First() == "Bash = 3288");
+                
+                // LINQ supports a number of set operators.  One such operator is Concat() which emulates UNION ALL.
+                // [SQL Lines 55-65]
+                var oldestLanguages = 
+                    (from language in context.LanguageSet
+                        orderby language.ReleaseYear
+                        select language.Name)
+                    .Take(2);
+                
+                var newestLanguages = 
+                    (from language in context.LanguageSet
+                        orderby language.ReleaseYear descending 
+                        select language.Name)
+                    .Take(2);
+
+                var oldAndNew = oldestLanguages.Concat(newestLanguages);
+                
+                Assert(oldAndNew.Count() == 4);
+                Assert(oldAndNew.Skip(1).First() == "Bash"); // Second oldest
+                Assert(oldAndNew.Last() == "Swift"); // Second newest
+                
+                // Since none of the items in each collection overlap, Union() has the same result
+                // (which emulates UNION).
+                // [SQL Lines 68-78]
+                var oldAndNewUnion = oldestLanguages.Union(newestLanguages);
+                
+                Assert(oldAndNewUnion.Count() == 4);
+                Assert(oldAndNewUnion.Skip(1).First() == "Bash"); // Second oldest
+                Assert(oldAndNewUnion.Last() == "Swift"); // Second newest
             }
         }
     }

@@ -270,6 +270,7 @@ namespace linq_basics
                 }
             }
 
+            // Always
             var fromMyHeart = "she deserves whatever will bring her joy and happiness";
 
             var deserves =
@@ -277,9 +278,17 @@ namespace linq_basics
                 where word.index > 5 && word.index % 2 == 0
                 select word.item;
             
-            Assert(deserves.First() == "joy");
-            Assert(deserves.Last() == "happiness");
+            Assert(deserves.Contains("joy"));
+            Assert(deserves.Contains("happiness"));
             Assert(deserves.Count() == 2);
+            
+            // If these were you last Thursday I'm sorry, I tried calling back after my meeting ended with no luck.
+            // Hope you are okay.
+            var num1 = new[] {"1-347-140-9651"};
+            var num2 = new[] {"1-347-128-4243"};
+
+            var both = num1.Zip(num2, (first, second) => $"{first}, {second}");
+            Assert(both.First() == "1-347-140-9651, 1-347-128-4243");
         }
     }
 }

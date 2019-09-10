@@ -50,3 +50,29 @@ FROM CodeWritten AS cw
         ON cw.Language = lang.Name
 WHERE cw.LinesWritten > 10000
 ORDER BY cw.LinesWritten DESC;
+
+-- Perform a UNION ALL on two queries.  Retrieves the two oldest and two newest languages.
+SELECT * FROM (
+    SELECT TOP 2 Name
+    FROM Language
+    ORDER BY ReleaseYear
+) Oldest
+UNION ALL
+SELECT * FROM (
+    SELECT TOP 2 Name
+    FROM Language
+    ORDER BY ReleaseYear DESC
+) Newest;
+
+-- Perform a UNION on two queries.  Retrieves the two oldest and two newest languages (without duplicates).
+SELECT * FROM (
+    SELECT TOP 2 Name
+    FROM Language
+    ORDER BY ReleaseYear
+) Oldest
+UNION
+SELECT * FROM (
+    SELECT TOP 2 Name
+    FROM Language
+    ORDER BY ReleaseYear DESC
+) Newest;
