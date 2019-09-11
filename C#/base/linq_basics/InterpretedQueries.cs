@@ -1,6 +1,6 @@
 /**
  * Investigate LINQ Interpreted (Remote) Queries in the .NET Framework
- * Sources: [C# 7.0 In a Nutshell: Page 379-]
+ * Sources: [C# 7.0 In a Nutshell: Page 379-454]
  * Author: Andrew Jarombek
  * Date: 8/25/2019
  */
@@ -211,7 +211,7 @@ namespace linq_basics
                 Assert(javaLanguages.Count() == 12);
 
                 // Perform the equivalent of an INNER JOIN with a select clause.
-                // [SQL Lines 46-51]
+                // [SQL Lines 47-52]
                 var highLinesWrittenJoin =
                     from written in context.CodeWrittenSet
                     where written.LinesWritten > 10000
@@ -229,6 +229,7 @@ namespace linq_basics
                 Assert(highLinesWrittenJoin.First().LinesWritten == mostLinesWrittenEver.LinesWritten);
 
                 // Query the languages and return just the names in alphabetical order.
+                // [SQL Line 55]
                 var languageNames =
                     from language in context.LanguageSet
                     orderby language.Name
@@ -238,6 +239,7 @@ namespace linq_basics
 
                 // Query the code written statistics and group by the language name.  Retrieve the sum of the
                 // lines of code written for each language.
+                // [SQL Lines 58-61]
                 var languageTotalStats =
                     from codeWritten in context.CodeWrittenSet
                     orderby codeWritten.Language
@@ -248,7 +250,8 @@ namespace linq_basics
                 Assert(languageTotalStats.First() == 3288);
 
                 // Zip the two previous queries to associate the language with the total statistics
-                var languagesZipped = languageNames.ToArray().Zip(languageTotalStats.ToArray(), (name, total) => $"{name} = {total}");
+                var languagesZipped = languageNames.ToArray()
+                    .Zip(languageTotalStats.ToArray(), (name, total) => $"{name} = {total}");
 
                 foreach (var languageTotals in languagesZipped)
                 {
@@ -257,8 +260,45 @@ namespace linq_basics
                 
                 Assert(languagesZipped.First() == "Bash = 3288");
                 
+                // Work with the total number of lines written for each language to demonstrate OfType() and Case()
+                // type conversion methods.
+                var doubleTotals = languageTotalStats.Cast<double>();
+                var longTotals = languageTotalStats.Cast<long>();
+                var stringTotals = languageTotalStats.Cast<string>();
+                
+                var doubleTotalsAgain = languageTotalStats.OfType<double>();
+                var longTotalsAgain = languageTotalStats.OfType<long>();
+                var stringTotalsAgain = languageTotalStats.OfType<string>();
+
+                Assert(doubleTotals.Count() == 18);
+                Assert(longTotals.Count() == 18);
+                
+                Assert(doubleTotalsAgain.Count() == 0);
+                Assert(longTotalsAgain.Count() == 0);
+
+                try
+                {
+                    // Since an int can't be coerced to a string, this statement should always throw an exception.
+                    var _ = stringTotals.Any();
+                    Assert(false);
+                }
+                catch (InvalidOperationException e)
+                {
+                    Assert(e.Message.Length > 0);
+                }
+
+                try
+                {
+                    var _ = stringTotalsAgain.Count() == 0;
+                    Assert(false);
+                }
+                catch (InvalidOperationException e)
+                {
+                    Assert(e.Message.Length > 0);
+                }
+
                 // LINQ supports a number of set operators.  One such operator is Concat() which emulates UNION ALL.
-                // [SQL Lines 55-65]
+                // [SQL Lines 64-74]
                 var oldestLanguages = 
                     (from language in context.LanguageSet
                         orderby language.ReleaseYear
@@ -279,7 +319,7 @@ namespace linq_basics
                 
                 // Since none of the items in each collection overlap, Union() has the same result
                 // (which emulates UNION).
-                // [SQL Lines 68-78]
+                // [SQL Lines 77-87]
                 var oldAndNewUnion = oldestLanguages.Union(newestLanguages);
                 
                 Assert(oldAndNewUnion.Count() == 4);

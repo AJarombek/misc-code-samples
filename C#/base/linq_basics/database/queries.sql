@@ -51,6 +51,15 @@ FROM CodeWritten AS cw
 WHERE cw.LinesWritten > 10000
 ORDER BY cw.LinesWritten DESC;
 
+-- Retrieve the names of the programming languages in alphabetical order.
+SELECT Name FROM Language ORDER BY Name;
+
+-- Get the total number of lines written for each language.
+SELECT SUM(LinesWritten) AS TOTALS
+FROM CodeWritten
+GROUP BY Language
+ORDER BY Language;
+
 -- Perform a UNION ALL on two queries.  Retrieves the two oldest and two newest languages.
 SELECT * FROM (
     SELECT TOP 2 Name
