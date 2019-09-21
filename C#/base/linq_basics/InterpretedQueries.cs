@@ -16,11 +16,15 @@ using static System.Diagnostics.Debug;
 
 namespace linq_basics
 {
+    /// <summary>
+    /// Class used to connect to SQLServer and allow for queries to be made against the tables.
+    /// </summary>
     public class LanguageContext : DbContext
     {
         public DbSet<Language> LanguageSet { get; set; }
         public DbSet<CodeWritten> CodeWrittenSet { get; set; }
 
+        /// <inheritdoc cref="DbContext.OnConfiguring"/>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
@@ -29,6 +33,9 @@ namespace linq_basics
         }
     }
     
+    /// <summary>
+    /// Model object for the <code>Language</code> table in SQLServer.
+    /// </summary>
     [Table("Language")]
     public class Language
     {
@@ -44,6 +51,9 @@ namespace linq_basics
         public List<CodeWritten> CodeWrittenReferences { get; set; }
     }
     
+    /// <summary>
+    /// Model object for the <code>CodeWritten</code> table in SQLServer.
+    /// </summary>
     [Table("CodeWritten")]
     public class CodeWritten
     {
