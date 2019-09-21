@@ -30,9 +30,9 @@ namespace linq_basics
             // of the lambda function is 'true', the item is passed onto the output sequence.
             IEnumerable<KeyValuePair<string, int>> multipleDeer = Enumerable.Where(
                 deerSpottedToday, 
-                spot => spot.Value > 1
+                spot => spot.Value >= 1
             );
-            Assert(multipleDeer.Count() == 1);
+            Assert(multipleDeer.Count() == 2);
 
             // Query operators are also extension methods for IEnumerable.  An extension method is one added to an
             // existing type without modifying the existing types definition.  In the example of query operators,
