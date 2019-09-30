@@ -1,6 +1,6 @@
 /**
  * Investigate disposal mechanisms in the .NET Framework
- * Sources: [C# 7.0 In a Nutshell: Page 513-]
+ * Sources: [C# 7.0 In a Nutshell: Page 513-519]
  * Author: Andrew Jarombek
  * Date: 9/21/2019
  */
@@ -54,6 +54,15 @@ namespace garbage_collection
         {
             if (IsDisposed) throw new ObjectDisposedException("door");
             IsOpen = false;
+        }
+
+        /// <summary>
+        /// Finalizer (destructor) which also calls finalize on the Door object.  The finalizer runs implicitly before
+        /// the object is released from memory.
+        /// </summary>
+        ~Door()
+        {
+            Dispose();
         }
         
         /// <summary>

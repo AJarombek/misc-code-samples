@@ -12,6 +12,7 @@ namespace garbage_collection
         static void Main(string[] args)
         {
             Disposal.Execute();
+            GarbageCollector.Execute();
         }
     }
 }
