@@ -20,8 +20,8 @@ UnsortedCharArray init_empty();
 UnsortedCharArray init(int length);
 int insert(UnsortedCharArray* array, char item, int index);
 int add(UnsortedCharArray* array, char item);
-char get(UnsortedCharArray* array, int index);
-char search(UnsortedCharArray* array, char item);
+char* get(UnsortedCharArray* array, int index);
+char* search(UnsortedCharArray* array, char item);
 
 int main() {
     UnsortedCharArray unsortedArray = init_empty();
@@ -50,10 +50,10 @@ UnsortedCharArray init(int length) {
 
 int insert(UnsortedCharArray* array, char item, int index) {
     if (index >= array->capacity) {
-        return 0;
+        return EXIT_FAILURE;
     } else {
         array->content[index] = item;
-        return 1;
+        return EXIT_SUCCESS;
     }
 }
 
@@ -66,13 +66,21 @@ int add(UnsortedCharArray* array, char item) {
 
     array->content[array->size + 1] = item;
     array->size++;
-    return 1;
+    return EXIT_SUCCESS;
 }
 
-char get(UnsortedCharArray* array, int index) {
-    return 'a'; // TODO
+char* get(UnsortedCharArray* array, int index) {
+    if (index > array->size) {
+        return &array->content[index];
+    } else {
+        return ((void *) 0);
+    }
 }
 
-char search(UnsortedCharArray* array, char item) {
-    return 'a'; // TODO
+char* search(UnsortedCharArray* array, char item) {
+    for (int i = 0; i < array->size; i++) {
+
+    }
+
+    return ((void *) 0);
 }
