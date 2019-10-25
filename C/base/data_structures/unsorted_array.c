@@ -53,16 +53,16 @@ int insert(UnsortedCharArray* array, char item, int index) {
 void add(UnsortedCharArray* array, char item) {
     if (array->size + 1 >= array->capacity) {
         int newCapacity = array->capacity * 1.5 + 1;
-        array->content = realloc(array->content, sizeof(char));
+        array->content = realloc(array->content, newCapacity * sizeof(char));
         array->capacity = newCapacity;
     }
 
-    array->content[array->size + 1] = item;
+    array->content[array->size] = item;
     array->size++;
 }
 
 char* get(UnsortedCharArray* array, int index) {
-    if (index > array->size) {
+    if (index < array->size) {
         return &array->content[index];
     } else {
         return (void *) 0;
@@ -94,10 +94,14 @@ int remove(UnsortedCharArray* array, char item) {
 
 char* pop(UnsortedCharArray* array, int index) {
     if (0 <= index < array->size) {
+        char* item = &array->content[index];
+
         for (int i = index + 1; i < array->size; i++) {
-            // TODO
+            array->content[i - 1] = array->content[i];
         }
-        return &array->content[index];
+
+        array->size = array->size - 1;
+        return item;
     } else {
         return (void *) 0;
     }
@@ -105,8 +109,44 @@ char* pop(UnsortedCharArray* array, int index) {
 
 int main() {
     UnsortedCharArray unsortedArray = init_empty();
+
+    assert(unsortedArray.size == 0);
+    assert(unsortedArray.capacity == 0);
+
     int insertSuccess = insert(&unsortedArray, 'a', 0);
-    assert(insertSuccess == 0);
+
+    assert(insertSuccess == 1);
+    assert(unsortedArray.size == 0);
+    assert(unsortedArray.capacity == 0);
 
     add(&unsortedArray, 'a');
+
+    assert(unsortedArray.content[0] == 'a');
+    assert(unsortedArray.size == 1);
+    assert(unsortedArray.capacity == 1);
+
+    char* firstChar = get(&unsortedArray, 0);
+
+    assert(*firstChar == 'a');
+    assert(unsortedArray.size == 1);
+    assert(unsortedArray.capacity == 1);
+
+    int aIndex = search(&unsortedArray, 'a');
+
+    assert(aIndex == 0);
+    assert(unsortedArray.size == 1);
+    assert(unsortedArray.capacity == 1);
+
+    add(&unsortedArray, 'j');
+
+    assert(unsortedArray.content[1] == 'j');
+    assert(unsortedArray.size == 2);
+    assert(unsortedArray.capacity == 2);
+
+    int removedSuccessfully = remove(&unsortedArray, 'a');
+
+    assert(unsortedArray.content[0] == 'j');
+    assert(removedSuccessfully == 0);
+    assert(unsortedArray.size == 1);
+    assert(unsortedArray.capacity == 2);
 }
