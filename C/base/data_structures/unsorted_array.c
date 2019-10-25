@@ -19,18 +19,11 @@ typedef struct UnsortedCharArray {
 UnsortedCharArray init_empty();
 UnsortedCharArray init(int length);
 int insert(UnsortedCharArray* array, char item, int index);
-int add(UnsortedCharArray* array, char item);
+void add(UnsortedCharArray* array, char item);
 char* get(UnsortedCharArray* array, int index);
-char* search(UnsortedCharArray* array, char item);
-
-int main() {
-    UnsortedCharArray unsortedArray = init_empty();
-    int insertSuccess = insert(&unsortedArray, 'a', 0);
-    assert(insertSuccess == 0);
-
-    int addSuccess = add(&unsortedArray, 'a');
-    assert(addSuccess == 1);
-}
+int search(UnsortedCharArray* array, char item);
+int remove(UnsortedCharArray* array, char item);
+char* pop(UnsortedCharArray* array, int index);
 
 UnsortedCharArray init_empty() {
     UnsortedCharArray array;
@@ -57,7 +50,7 @@ int insert(UnsortedCharArray* array, char item, int index) {
     }
 }
 
-int add(UnsortedCharArray* array, char item) {
+void add(UnsortedCharArray* array, char item) {
     if (array->size + 1 >= array->capacity) {
         int newCapacity = array->capacity * 1.5 + 1;
         array->content = realloc(array->content, sizeof(char));
@@ -66,21 +59,54 @@ int add(UnsortedCharArray* array, char item) {
 
     array->content[array->size + 1] = item;
     array->size++;
-    return EXIT_SUCCESS;
 }
 
 char* get(UnsortedCharArray* array, int index) {
     if (index > array->size) {
         return &array->content[index];
     } else {
-        return ((void *) 0);
+        return (void *) 0;
     }
 }
 
-char* search(UnsortedCharArray* array, char item) {
+int search(UnsortedCharArray* array, char item) {
     for (int i = 0; i < array->size; i++) {
-
+        if (array->content[i] == item) {
+            return i;
+        }
     }
+    return -1;
+}
 
-    return ((void *) 0);
+int remove(UnsortedCharArray* array, char item) {
+    for (int i = 0; i < array->size; i++) {
+        if (array->content[i] == item) {
+            if (array->size - 1 != i) {
+                array->content[i] = array->content[array->size - 1];
+            }
+
+            array->size = array->size - 1;
+            return EXIT_SUCCESS;
+        }
+    }
+    return EXIT_FAILURE;
+}
+
+char* pop(UnsortedCharArray* array, int index) {
+    if (0 <= index < array->size) {
+        for (int i = index + 1; i < array->size; i++) {
+            // TODO
+        }
+        return &array->content[index];
+    } else {
+        return (void *) 0;
+    }
+}
+
+int main() {
+    UnsortedCharArray unsortedArray = init_empty();
+    int insertSuccess = insert(&unsortedArray, 'a', 0);
+    assert(insertSuccess == 0);
+
+    add(&unsortedArray, 'a');
 }
