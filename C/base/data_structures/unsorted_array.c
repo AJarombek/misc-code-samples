@@ -93,7 +93,7 @@ int remove(UnsortedCharArray* array, char item) {
 }
 
 char* pop(UnsortedCharArray* array, int index) {
-    if (0 <= index < array->size) {
+    if (index <= 0 && index < array->size) {
         char* item = &array->content[index];
 
         for (int i = index + 1; i < array->size; i++) {
@@ -149,4 +149,18 @@ int main() {
     assert(removedSuccessfully == 0);
     assert(unsortedArray.size == 1);
     assert(unsortedArray.capacity == 2);
+
+    char* jChar = pop(&unsortedArray, 0);
+
+    assert(*jChar == 'j');
+    assert(unsortedArray.size == 0);
+    assert(unsortedArray.capacity == 2);
+
+    add(&unsortedArray, 'a');
+    add(&unsortedArray, 'j');
+
+    assert(unsortedArray.content[0] == 'a');
+    assert(unsortedArray.content[1] == 'j');
+    assert(unsortedArray.size == 2);
+    assert(unsortedArray.capacity == 4);
 }
