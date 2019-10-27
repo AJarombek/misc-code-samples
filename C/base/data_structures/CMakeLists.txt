@@ -9,7 +9,7 @@ set(DataStructures_VERSION_MAJOR 1)
 set(DataStructures_VERSION_MINOR 0)
 
 configure_file(
-    "${PROJECT_SOURCE_DIR}/DataStructuresConfig.h.in",
+    "${PROJECT_SOURCE_DIR}/DataStructuresConfig.h",
     "${PROJECT_BINARY_DIR}/DataStructuresConfig.h"
 )
 

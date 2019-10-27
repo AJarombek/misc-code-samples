@@ -4,8 +4,10 @@
  * @date 10/20/2019
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include "DataStructures.h"
 
 /**
  * Struct representing an unsorted, resizable array data structure.  This array explicitly holds characters.
@@ -108,6 +110,8 @@ char* pop(UnsortedCharArray* array, int index) {
 }
 
 int main() {
+    printf("Data Structures: Unsorted Array Version %s.%s", DataStructures_VERISON_MAJOR, DataStructures_VERISON_MINOR);
+
     UnsortedCharArray unsortedArray = init_empty();
 
     assert(unsortedArray.size == 0);

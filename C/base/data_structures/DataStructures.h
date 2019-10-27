@@ -1,0 +1,2 @@
+#define DataStructures_VERISON_MAJOR @DataStructures_VERISON_MAJOR@
+#define DataStructures_VERISON_MINOR @DataStructures_VERISON_MINOR@
