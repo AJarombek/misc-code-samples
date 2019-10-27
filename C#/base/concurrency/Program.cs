@@ -13,6 +13,8 @@ namespace concurrency
         {
             Threading.ExecuteBasicThread();
             Threading.ExecuteThread();
+            Threading.ExecuteThreadSignal();
+            Threading.ExecuteTasks();
         }
     }
 }
