@@ -1,20 +1,17 @@
-# Make the C project to test for type equality.
+# Make the C project for data structures.
 # Author: Andrew Jarombek
-# Date: 8/17/2019
+# Date: 10/27/2019
 
 cmake_minimum_required(VERSION 3.9)
 project(DataStructures)
 
-set(DataStructures_VERSION_MAJOR 1)
-set(DataStructures_VERSION_MINOR 0)
-
-configure_file(
-    "${PROJECT_SOURCE_DIR}/DataStructuresConfig.h",
-    "${PROJECT_BINARY_DIR}/DataStructuresConfig.h"
-)
-
-include_directories("${PROJECT_BINARY_DIR}")
+option(ENABLE_TESTS "Enable Tests" ON)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(DataStructures unsorted_array.c)
+add_subdirectory(src)
+
+if (${ENABLE_TESTS})
+    enable_testing()
+    add_subdirectory(test)
+endif()

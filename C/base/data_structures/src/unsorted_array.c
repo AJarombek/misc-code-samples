@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "DataStructuresConfig.h"
+//#include "DataStructuresConfig.h"
 
 /**
  * Struct representing an unsorted, resizable array data structure.  This array explicitly holds characters.
@@ -86,14 +86,27 @@ void add(UnsortedCharArray* array, char item) {
     array->size++;
 }
 
+/**
+ * Return the value at an index in the unsorted array.  This is an O(1) operation.
+ * @param array The unsorted array to get a value from.
+ * @param index The index of the array to return the value from.
+ * @return A pointer to the character at a given index if the index is within the array.  Otherwise,
+ * return a void pointer.
+ */
 char* get(UnsortedCharArray* array, int index) {
-    if (index < array->size) {
+    if (index < array->size && index >= 0) {
         return &array->content[index];
     } else {
         return (void *) 0;
     }
 }
 
+/**
+ * Search for a character within the array.  Since the array is unsorted, this operation takes O(n) time.
+ * @param array The unsorted array to search for a character within.
+ * @param item A character to search for.
+ * @return The index of the first occurrence of the item if it's found, -1 otherwise.
+ */
 int search(UnsortedCharArray* array, char item) {
     for (int i = 0; i < array->size; i++) {
         if (array->content[i] == item) {
@@ -103,6 +116,13 @@ int search(UnsortedCharArray* array, char item) {
     return -1;
 }
 
+/**
+ * Delete the first instance of a character from the array.  This is an O(n) operation, since the array needs
+ * to be looped through.
+ * @param array The unsorted array to delete an item from.
+ * @param item A character to search for and delete.
+ * @return 0 if the character was deleted successfully, 1 otherwise.
+ */
 int delete(UnsortedCharArray* array, char item) {
     for (int i = 0; i < array->size; i++) {
         if (array->content[i] == item) {
@@ -117,8 +137,16 @@ int delete(UnsortedCharArray* array, char item) {
     return EXIT_FAILURE;
 }
 
+/**
+ * Delete and return an item from the array.  This is an O(1) operation since the implementation takes advantage of the
+ * fact that the array is not expected to be sorted.
+ * @param array The unsorted array to remove and return an item at a given index.
+ * @param index The index in the array to delete and return a character from.
+ * @return A pointer to the character at a given index if the index is within the array.  Otherwise,
+ * return a void pointer.
+ */
 char* pop(UnsortedCharArray* array, int index) {
-    if (index <= 0 && index < array->size) {
+    if (index >= 0 && index < array->size) {
         char* item = &array->content[index];
 
         for (int i = index + 1; i < array->size; i++) {
@@ -133,7 +161,7 @@ char* pop(UnsortedCharArray* array, int index) {
 }
 
 int main() {
-    printf("Data Structures: Unsorted Array Version %s.%s", DataStructures_VERISON_MAJOR, DataStructures_VERISON_MINOR);
+    //printf("Data Structures: Unsorted Array Version %s.%s", DataStructures_VERISON_MAJOR, DataStructures_VERISON_MINOR);
 
     UnsortedCharArray unsortedArray = init_empty();
 
