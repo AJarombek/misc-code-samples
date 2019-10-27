@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "DataStructures.h"
+#include "DataStructuresConfig.h"
 
 /**
  * Struct representing an unsorted, resizable array data structure.  This array explicitly holds characters.
@@ -24,9 +24,14 @@ int insert(UnsortedCharArray* array, char item, int index);
 void add(UnsortedCharArray* array, char item);
 char* get(UnsortedCharArray* array, int index);
 int search(UnsortedCharArray* array, char item);
-int remove(UnsortedCharArray* array, char item);
+int delete(UnsortedCharArray* array, char item);
 char* pop(UnsortedCharArray* array, int index);
 
+/**
+ * Initialize a new unsorted array that is empty and with a capacity of zero.  Calling add() is the only way to create
+ * a populated array from this empty one.
+ * @return An empty unsorted array that can contain characters.
+ */
 UnsortedCharArray init_empty() {
     UnsortedCharArray array;
     array.capacity = 0;
@@ -35,6 +40,11 @@ UnsortedCharArray init_empty() {
     return array;
 }
 
+/**
+ * Initialize an unsorted character array of a given capacity.
+ * @param length The initial capacity of the array.
+ * @return An unsorted character array.
+ */
 UnsortedCharArray init(int length) {
     UnsortedCharArray array;
     array.capacity = length;
@@ -43,6 +53,13 @@ UnsortedCharArray init(int length) {
     return array;
 }
 
+/**
+ * Insert a character into the unsorted array at a given index.  This is an O(1) operation.
+ * @param array The unsorted array to insert the new character into.
+ * @param item The character to insert into the array.
+ * @param index The location in the array to insert the character.
+ * @return 0 if the character was inserted successfully, 1 otherwise.
+ */
 int insert(UnsortedCharArray* array, char item, int index) {
     if (index >= array->capacity) {
         return EXIT_FAILURE;
@@ -52,6 +69,12 @@ int insert(UnsortedCharArray* array, char item, int index) {
     }
 }
 
+/**
+ * Add a new item to the end of the unsorted array.  This is an O(1) operation on most occasions, however the array
+ * occasionally needs to be increased in size.  In that edge case, the runtime is O(n).
+ * @param array The unsorted array to add the new item onto.
+ * @param item The new character to add onto the end of the array.
+ */
 void add(UnsortedCharArray* array, char item) {
     if (array->size + 1 >= array->capacity) {
         int newCapacity = array->capacity * 1.5 + 1;
@@ -80,7 +103,7 @@ int search(UnsortedCharArray* array, char item) {
     return -1;
 }
 
-int remove(UnsortedCharArray* array, char item) {
+int delete(UnsortedCharArray* array, char item) {
     for (int i = 0; i < array->size; i++) {
         if (array->content[i] == item) {
             if (array->size - 1 != i) {
@@ -147,7 +170,7 @@ int main() {
     assert(unsortedArray.size == 2);
     assert(unsortedArray.capacity == 2);
 
-    int removedSuccessfully = remove(&unsortedArray, 'a');
+    int removedSuccessfully = delete(&unsortedArray, 'a');
 
     assert(unsortedArray.content[0] == 'j');
     assert(removedSuccessfully == 0);
