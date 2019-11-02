@@ -161,7 +161,7 @@ char* pop(UnsortedCharArray* array, int index) {
 }
 
 int main() {
-    //printf("Data Structures: Unsorted Array Version %s.%s", DataStructures_VERISON_MAJOR, DataStructures_VERISON_MINOR);
+    printf("Data Structures: Unsorted Array Version %d.%d", 0, 1);
 
     UnsortedCharArray unsortedArray = init_empty();
 
