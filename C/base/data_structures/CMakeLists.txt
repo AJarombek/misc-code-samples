@@ -4,7 +4,6 @@
 
 cmake_minimum_required(VERSION 3.9)
 project(DataStructures)
-project(TestDataStructures)
 
 option(ENABLE_TESTS "Enable Tests" ON)
 

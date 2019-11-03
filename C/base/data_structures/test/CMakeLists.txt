@@ -10,5 +10,5 @@ set(LIBS ${LIBS} ${CHECK_LIBRARIES} DataStructuresLib)
 
 include_directories(. ../src)
 add_executable(TestDataStructures test_unsorted_array.c)
-add_test(TestDataStructures ${CMAKE_CURRENT_BINARY_DIR}/TestDataStructures)
 target_link_libraries(TestDataStructures ${LIBS})
+add_test(TestDataStructures ${CMAKE_CURRENT_BINARY_DIR}/TestDataStructures)
