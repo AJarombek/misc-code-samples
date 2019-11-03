@@ -1,6 +1,6 @@
 /**
  * Learn how to use Threads in the .NET Framework and C#
- * Sources: [C# 7.0 In a Nutshell: Page 559-]
+ * Sources: [C# 7.0 In a Nutshell: Page 559-590]
  * Author: Andrew Jarombek
  * Date: 10/1/2019
  */
