@@ -17,6 +17,7 @@ namespace concurrency
             Threading.ExecuteThread();
             Threading.ExecuteThreadSignal();
             Threading.ExecuteTasks();
+            Threading.ExecuteTaskCombinators();
             Async.Execute();
             
             // Sleep so that the program won't end before the asynchronous calls return.

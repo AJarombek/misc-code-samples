@@ -1,6 +1,6 @@
 /**
  * Learn how to use Asynchronous Functions in the .NET Framework and C#
- * Sources: [C# 7.0 In a Nutshell: Page 590-]
+ * Sources: [C# 7.0 In a Nutshell: Page 590-614]
  * Author: Andrew Jarombek
  * Date: 10/27/2019
  */
