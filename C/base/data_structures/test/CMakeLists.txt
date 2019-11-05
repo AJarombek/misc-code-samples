@@ -2,11 +2,13 @@
 # Author: Andrew Jarombek
 # Date: 10/27/2019
 
+message(C Tests)
+
 set(Check_DIR ../CMakeModules)
 
 find_package(Check REQUIRED)
 include_directories(${CHECK_INCLUDE_DIRS})
-set(LIBS ${LIBS} ${CHECK_LIBRARIES} DataStructuresLib)
+set(LIBS "check DataStructuresLib")
 
 include_directories(. ../src)
 add_executable(TestDataStructures test_unsorted_array.c)
