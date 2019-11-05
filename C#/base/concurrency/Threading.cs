@@ -1,6 +1,6 @@
 /**
  * Learn how to use Threads in the .NET Framework and C#
- * Sources: [C# 7.0 In a Nutshell: Page 559-]
+ * Sources: [C# 7.0 In a Nutshell: Page 559-590]
  * Author: Andrew Jarombek
  * Date: 10/1/2019
  */
@@ -166,6 +166,66 @@ namespace concurrency
                 var resultString = string.Join("", resultList);
                 Assert(resultString == "andy");
             });
+        }
+
+        public static async void ExecuteTaskCombinators()
+        {
+            Task<string> fastestApi = await Task.WhenAny(FastApi(), SlowApi());
+            Assert(fastestApi.Result == "Fast API");
+            Console.WriteLine($"Fastest API Response: {fastestApi.Result}");
+
+            await Task.WhenAll(FastApi(), SlowApi());
+            Console.WriteLine("Successfully Received Responses from Slow API and Fast API");
+
+            try
+            {
+                // If one of the tasks fails (throws an error), the error is propagated.
+                await Task.WhenAll(FastApi(), FaultyApi());
+                
+                // This point will never be reached.
+                Assert(false);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to Receive Responses from Fast API and Faulty API");
+                Assert(true);
+                Assert(e != null);
+            }
+        }
+
+        /// <summary>
+        /// Simulate a fast API that returns a result in 100 milliseconds.
+        /// </summary>
+        /// <returns>A task which resolves to a string value.</returns>
+        private static Task<string> FastApi()
+        {
+            return Task.Run(() =>
+            {
+                Thread.Sleep(100);
+                return "Fast API";
+            });
+        }
+        
+        /// <summary>
+        /// Simulate a slow API that returns a result in 2 seconds.
+        /// </summary>
+        /// <returns>A task which resolves to a string value.</returns>
+        private static Task<string> SlowApi()
+        {
+            return Task.Run(() =>
+            {
+                Thread.Sleep(2000);
+                return "Slow API";
+            });
+        }
+
+        /// <summary>
+        /// Simulate an API which fails with an error.  No return value is given.
+        /// </summary>
+        /// <returns>A Task which throws an exception instead of resolving to a value.</returns>
+        public static Task FaultyApi()
+        {
+            return Task.Run(() => throw new Exception());
         }
     }
 }
