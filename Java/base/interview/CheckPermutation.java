@@ -3,6 +3,7 @@ import java.util.Map;
 
 /**
  * Cracking the Coding Interview: Question 1.2
+ * Given two strings, write a method to decide if one is a permutation of the other.
  * @author Andrew Jarombek
  * @since 11/20/2019
  */
