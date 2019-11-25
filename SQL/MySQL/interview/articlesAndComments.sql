@@ -2,7 +2,7 @@
 -- Author: Andrew Jarombek
 -- Date: 10/31/2019
 
-DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS article_attribute;
 
 -- This table contains two types of information - articles and comments.  Articles populate 'id' with the article
 -- identifier and 'parent_id' with NULL.  Comments populate 'id' with the comment identifier and 'parent_id' with

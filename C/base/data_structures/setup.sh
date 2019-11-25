@@ -3,6 +3,7 @@
 # Date: 10/27/2019
 
 brew install cmake
+cmake --version
 
 # https://libcheck.github.io/check/web/install.html#osxhomebrew
 brew install check

@@ -7,25 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-//#include "DataStructuresConfig.h"
-
-/**
- * Struct representing an unsorted, resizable array data structure.  This array explicitly holds characters.
- */
-typedef struct UnsortedCharArray {
-    int capacity;
-    int size;
-    char* content;
-} UnsortedCharArray;
-
-UnsortedCharArray init_empty();
-UnsortedCharArray init(int length);
-int insert(UnsortedCharArray* array, char item, int index);
-void add(UnsortedCharArray* array, char item);
-char* get(UnsortedCharArray* array, int index);
-int search(UnsortedCharArray* array, char item);
-int delete(UnsortedCharArray* array, char item);
-char* pop(UnsortedCharArray* array, int index);
+#include "unsorted_array.h"
 
 /**
  * Initialize a new unsorted array that is empty and with a capacity of zero.  Calling add() is the only way to create
