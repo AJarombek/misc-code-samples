@@ -7,7 +7,11 @@ project(DataStructures)
 
 option(ENABLE_TESTS "Enable Tests" ON)
 
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 11)
+
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
+set(BUILD_SHARED_LIBS OFF)
+set(CMAKE_BUILD_TYPE Debug)
 
 add_subdirectory(src)
 
