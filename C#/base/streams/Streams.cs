@@ -5,15 +5,7 @@
  * Date: 11/3/2019
  */
 
-using static System.Diagnostics.Debug;
-
 namespace streams
 {
-    public class Streams
-    {
-        public static void Execute()
-        {
-            
-        }
-    }
+    public class Streams { }
 }

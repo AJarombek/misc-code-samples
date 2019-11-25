@@ -5,4 +5,16 @@
         <TargetFramework>netcoreapp2.2</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Compile Remove="streams-test\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="streams-test\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="streams-test\**" />
+    </ItemGroup>
+
 </Project>
