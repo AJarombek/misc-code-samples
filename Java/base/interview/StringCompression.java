@@ -8,6 +8,8 @@
  * @since 11/28/2019
  */
 
+// I hope you had a wonderful thanksgiving.
+
 public class StringCompression {
 
     /**
