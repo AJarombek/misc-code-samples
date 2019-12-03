@@ -1,3 +1,10 @@
+"""
+Class representing a node in a binary tree.
+Author: Andrew Jarombek
+Date: 10/1/2019
+"""
+
+
 class TreeNode:
     def __init__(self, val: int, left, right):
         """
