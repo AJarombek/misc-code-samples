@@ -6,7 +6,7 @@ Date: 10/1/2019
 
 
 class TreeNode:
-    def __init__(self, val: int, left, right):
+    def __init__(self, val: int, left=None, right=None):
         """
         Construct a node in a binary search tree.
         :param val: Integer value that this node holds.
