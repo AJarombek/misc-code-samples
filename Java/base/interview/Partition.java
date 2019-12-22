@@ -101,7 +101,7 @@ public class Partition {
                 linkedList.first.next.next.next.next.next.next.data == 10 &&
                 linkedList.first.next.next.next.next.next.next.next == null;
 
-        // Test the build in Collections API LinkedList<T>.
+        // Test the built-in Collections API LinkedList<T>.
         LinkedList<Integer> builtInLinkedList = new LinkedList<>(List.of(3, 5, 8, 5, 10, 2, 1));
         assert builtInLinkedList.toString().equals("[3, 5, 8, 5, 10, 2, 1]");
 
