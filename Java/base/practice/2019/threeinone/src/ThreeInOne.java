@@ -1,4 +1,7 @@
-import java.util.ArrayList;
+package src;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 /**
  * Cracking the Coding Interview: Question 3.1
@@ -7,15 +10,16 @@ import java.util.ArrayList;
  * @since 12/27/2019
  */
 
-public class ThreeInOne<T> {
-    private ArrayList<T> array;
+class ThreeInOne<T> {
+    private T[] array;
     private int[] sizes;
 
     /**
      * Construct a new three-in-one stack data structure instance.
      */
-    public ThreeInOne() {
-        array = new ArrayList<>();
+    @SuppressWarnings("unchecked")
+    ThreeInOne(Class<T> clazz) {
+        array = (T[]) Array.newInstance(clazz, 10);
         sizes = new int[3];
     }
 
@@ -29,7 +33,9 @@ public class ThreeInOne<T> {
         if (top == 0) {
             return null;
         } else {
-            T result = array.remove(top * 3 - (3 - stackId));
+            int index = top * 3 - (3 - stackId);
+            T result = array[index];
+            array[index] = null;
             sizes[stackId - 1] = sizes[stackId - 1] - 1;
             return result;
         }
@@ -42,8 +48,14 @@ public class ThreeInOne<T> {
      */
     public void push(int stackId, T item) {
         int top = sizes[stackId - 1];
-        sizes[stackId - 1] = top + 1;
-        array.add(top * 3 - (3 - stackId), item);
+        int newTop = top + 1;
+        sizes[stackId - 1] = newTop;
+
+        int index = newTop * 3 - (3 - stackId);
+        if (index >= array.length) {
+            array = Arrays.copyOf(array, array.length * 2);
+        }
+        array[index] = item;
     }
 
     /**
@@ -56,7 +68,7 @@ public class ThreeInOne<T> {
         if (top == 0) {
             return null;
         } else {
-            return array.get(top * 3 - (3 - stackId));
+            return array[top * 3 - (3 - stackId)];
         }
     }
 
