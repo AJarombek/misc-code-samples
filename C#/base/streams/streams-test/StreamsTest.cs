@@ -5,6 +5,7 @@
  * Date: 11/24/2019
  */
 
+using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -103,6 +104,103 @@ namespace streams_test
                 Assert.AreEqual(20, fs.Position);
                 Assert.AreEqual(1, bs.Position);
             }
+        }
+
+        /// <summary>
+        /// Test that the StreamReader/StreamWriter operate as expected when writing and reading text from a file.
+        /// </summary>
+        [TestMethod]
+        public async Task StreamReaderWriterOperateAsExpected()
+        {
+            Assert.IsFalse(File.Exists("note.txt"));
+            
+            using (FileStream fs = File.Create("note.txt"))
+            using(TextWriter writer = new StreamWriter(fs))
+            {
+                // WriteLine can be performed synchronously and asynchronously.
+                await writer.WriteLineAsync("Hi,");
+                writer.WriteLine("I hope you are doing well.");
+                await writer.WriteLineAsync("-Andy");
+            }
+            
+            Assert.IsTrue(File.Exists("note.txt"));
+
+            using (FileStream fs = File.OpenRead("note.txt"))
+            using (TextReader reader = new StreamReader(fs))
+            {
+                // ReadLine can also be performed synchronously and asynchronously.
+                Assert.AreEqual(reader.ReadLine(), "Hi,");
+                Assert.AreEqual(await reader.ReadLineAsync(), "I hope you are doing well.");
+                Assert.AreEqual(reader.ReadLine(), "-Andy");
+            }
+            
+            File.Delete("note.txt");
+            Assert.IsFalse(File.Exists("note.txt"));
+        }
+
+        /// <summary>
+        /// Prove that the bytes in a file that is UTF-8 encoded are as expected.
+        /// </summary>
+        [TestMethod]
+        public void StreamUtf8AsExpected()
+        {
+            using (TextWriter writer = File.CreateText("hi.txt"))
+                writer.WriteLine("hi");
+
+            byte[] fileBytes = File.ReadAllBytes("hi.txt");
+            Assert.AreEqual(4, fileBytes.Length);
+            Assert.AreEqual('h', (char) fileBytes[0]);
+            Assert.AreEqual('i', (char) fileBytes[1]);
+            
+            // At the end of the file comes a carriage return...
+            Assert.AreEqual('\r', (char) fileBytes[2]);
+            // ...followed by a line feed.
+            Assert.AreEqual('\n', (char) fileBytes[3]);
+            
+            File.Delete("hi.txt");
+            Assert.IsFalse(File.Exists("hi.txt"));
+        }
+        
+        /// <summary>
+        /// Prove that the bytes in a file that is UTF-16 encoded are as expected.
+        /// </summary>
+        [TestMethod]
+        public void StreamUtf16AsExpected()
+        {
+            using (Stream stream = File.Create("hi.txt"))
+            using (TextWriter writer = new StreamWriter(stream, Encoding.Unicode))
+                writer.WriteLine("hi");
+            
+            byte[] fileBytes = File.ReadAllBytes("hi.txt");
+            Assert.AreEqual(10, fileBytes.Length);
+            
+            // UTF-16 Byte Order Mark (BOM)
+            Assert.AreEqual((byte) 255, fileBytes[0]);
+            Assert.AreEqual((byte) 254, fileBytes[1]);
+            Assert.AreEqual('\uFEFF', BitConverter.ToChar(new [] {fileBytes[0], fileBytes[1]}));
+            
+            // 'h'
+            Assert.AreEqual((byte) 104, fileBytes[2]);
+            Assert.AreEqual((byte) 0, fileBytes[3]);
+            Assert.AreEqual('h', BitConverter.ToChar(new [] {fileBytes[2], fileBytes[3]}));
+            
+            // 'i'
+            Assert.AreEqual((byte) 105, fileBytes[4]);
+            Assert.AreEqual((byte) 0, fileBytes[5]);
+            Assert.AreEqual('i', BitConverter.ToChar(new [] {fileBytes[4], fileBytes[5]}));
+            
+            // Carriage Return <CR>
+            Assert.AreEqual((byte) 13, fileBytes[6]);
+            Assert.AreEqual((byte) 0, fileBytes[7]);
+            Assert.AreEqual('\r', BitConverter.ToChar(new [] {fileBytes[6], fileBytes[7]}));
+            
+            // Line Feed <LF>
+            Assert.AreEqual((byte) 10, fileBytes[8]);
+            Assert.AreEqual((byte) 0, fileBytes[9]);
+            Assert.AreEqual('\n', BitConverter.ToChar(new [] {fileBytes[8], fileBytes[9]}));
+            
+            File.Delete("hi.txt");
+            Assert.IsFalse(File.Exists("hi.txt"));
         }
     }
 }
