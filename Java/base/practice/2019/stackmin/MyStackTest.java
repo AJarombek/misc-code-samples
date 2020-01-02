@@ -1,3 +1,5 @@
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -9,7 +11,22 @@ import org.junit.jupiter.api.Test;
 class MyStackTest {
 
     @Test
-    void testPopPush() {
+    void test() {
+        MyStack<Integer> stack = new MyStack<>();
+        stack.push(2);
+        stack.push(1);
+        stack.push(3);
+        stack.push(0);
+        assertEquals(0, stack.min());
 
+        stack.pop();
+        assertEquals(1, stack.min());
+
+        stack.pop();
+        stack.pop();
+        assertEquals(2, stack.min());
+
+        stack.pop();
+        assertNull(stack.min());
     }
 }

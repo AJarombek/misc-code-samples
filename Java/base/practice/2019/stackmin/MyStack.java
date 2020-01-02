@@ -26,7 +26,7 @@ public class MyStack<T extends Comparable<? super T>> {
      * @return the item that was just added.
      */
     public T push(T item) {
-        if (item.compareTo(min) < 0) {
+        if (min == null || item.compareTo(min) < 0) {
             min = item;
         }
         return stack.push(item);
@@ -38,7 +38,9 @@ public class MyStack<T extends Comparable<? super T>> {
      */
     public T pop() {
         T result = stack.pop();
-        if (result.equals(min)) {
+        if (stack.empty()) {
+            min = null;
+        } else if (result.equals(min)) {
             min = stack.peek();
             for (T item : stack) {
                 if (item.compareTo(min) < 0) {
