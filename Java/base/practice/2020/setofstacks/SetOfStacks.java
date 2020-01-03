@@ -18,7 +18,7 @@ import java.util.Stack;
  * @since 1/2/2020
  */
 
-// Racing the 2 mile tonight!
+// Racing the 2 mile tonight!  Ran 10:18, around what I was running in high school senior year
 
 public class SetOfStacks<T> {
     private List<Stack<T>> stacks;
