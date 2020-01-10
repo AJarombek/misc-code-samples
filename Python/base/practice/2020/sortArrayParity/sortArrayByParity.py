@@ -5,7 +5,7 @@ Description:
     Sort the array so that whenever A[i] is odd, i is odd; and whenever A[i] is even, i is even.
 
 Author: Andrew Jarombek
-Date: 1/9/2019
+Date: 1/9/2020
 """
 
 
