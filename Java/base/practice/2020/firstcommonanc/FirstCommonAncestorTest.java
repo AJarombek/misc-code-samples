@@ -39,7 +39,7 @@ public class FirstCommonAncestorTest {
             new TreeNode<>(5)
         );
         TreeNode<Integer> result = commonAncestor(root, root.left.left.right, root.left.left.left);
-        //assertEquals(root.left.left, result);
+        assertEquals(root.left.left, result);
         assertEquals(root.left.left.value, result.value);
     }
 }
