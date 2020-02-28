@@ -51,11 +51,17 @@ class BSTSequences {
         }
     }
 
+    /*
+    for each in depthList
+     */
+
     private static void createSequences(List<List<Integer>> depthList, int depth) {
-        // TODO
+        for (List<Integer> list : depthList) {
+            List<List<Integer>> permutations = listPermutations(list);
+        }
     }
 
-    private static List<List<Integer>> listPermutations() {
-        // TODO
+    private static List<List<Integer>> listPermutations(List<Integer> list) {
+        return null; // TODO
     }
 }
