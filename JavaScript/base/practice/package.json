@@ -1,0 +1,17 @@
+{
+  "name": "javascript-practice-problems",
+  "version": "1.0.0",
+  "description": "JavaScript Practice Problems",
+  "main": "test.js",
+  "dependencies": {
+    "jest": "^25.1.0"
+  },
+  "scripts": {
+    "test": "jest *.test.js"
+  },
+  "keywords": [
+    "Jest"
+  ],
+  "author": "Andrew Jarombek",
+  "license": "ISC"
+}

@@ -9,3 +9,4 @@
 C/base/data_structures/build/
 **/*.iml
 Java/base/practice/2019/threeinone/target/**
+**/node_modules
