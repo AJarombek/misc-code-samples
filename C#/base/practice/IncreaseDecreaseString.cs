@@ -5,58 +5,61 @@
  * Date: 3/16/2020
  */
 
-public class Solution {
-    public string SortString(string s) {
-        var sortedStr = String.Concat(s.OrderBy(c => c));
-        var result = new System.Text.StringBuilder();
+ // You are and always have been a nice, kind person.  I hope you are now surrounded
+ // by those who are just as kind to you.
 
-        var index = 0;
-        var goingUp = true;
-        char? prevChar = null;
+ public class Solution {
+     public string SortString(string s) {
+         var sortedStr = String.Concat(s.OrderBy(c => c));
+         var result = new System.Text.StringBuilder();
 
-        while (sortedStr.Length > 0) {
-            char? charToAdd = null;
+         var index = 0;
+         var goingUp = true;
+         char? prevChar = null;
 
-            if (goingUp) {
-                while (charToAdd == null) {
-                    if (index == sortedStr.Length - 1) {
-                        goingUp = !goingUp;
-                        charToAdd = sortedStr[index];
-                    } else {
-                        if (prevChar == null || sortedStr[index] > prevChar) {
-                            charToAdd = sortedStr[index];
-                        } else {
-                            index++;
-                        }
-                    }
-                }
+         while (sortedStr.Length > 0) {
+             char? charToAdd = null;
 
-            } else {
-                while (charToAdd == null) {
-                    if (index == 0) {
-                        goingUp = !goingUp;
-                        charToAdd = sortedStr[index];
-                    } else {
-                        if (prevChar == null || sortedStr[index] < prevChar) {
-                            charToAdd = sortedStr[index];
-                        } else {
-                            index--;
-                        }
-                    }
-                }
-            }
+             if (goingUp) {
+                 while (charToAdd == null) {
+                     if (index == sortedStr.Length - 1) {
+                         goingUp = !goingUp;
+                         charToAdd = sortedStr[index];
+                     } else {
+                         if (prevChar == null || sortedStr[index] > prevChar) {
+                             charToAdd = sortedStr[index];
+                         } else {
+                             index++;
+                         }
+                     }
+                 }
 
-            sortedStr = sortedStr.Remove(index, 1);
-            result.Append(charToAdd);
-            prevChar = charToAdd;
+             } else {
+                 while (charToAdd == null) {
+                     if (index == 0) {
+                         goingUp = !goingUp;
+                         charToAdd = sortedStr[index];
+                     } else {
+                         if (prevChar == null || sortedStr[index] < prevChar) {
+                             charToAdd = sortedStr[index];
+                         } else {
+                             index--;
+                         }
+                     }
+                 }
+             }
 
-            if (goingUp) {
-                index = Math.Min(index + 1, sortedStr.Length - 1);
-            } else {
-                index = Math.Max(index - 1, 0);
-            }
-        }
+             sortedStr = sortedStr.Remove(index, 1);
+             result.Append(charToAdd);
+             prevChar = charToAdd;
 
-        return result.ToString();
-    }
-}
+             if (goingUp) {
+                 index = Math.Min(index, sortedStr.Length - 1);
+             } else {
+                 index = Math.Max(index - 1, 0);
+             }
+         }
+
+         return result.ToString();
+     }
+ }
