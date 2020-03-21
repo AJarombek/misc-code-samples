@@ -1,3 +1,16 @@
+<?php
+
+/**
+ * Practice Problem: https://leetcode.com/problems/replace-elements-with-greatest-element-on-right-side/
+ * Result: [SUCCESS: 0:05]
+ * Description:
+ *  Given an array arr, replace every element in that array with the greatest element among the elements to
+ *  its right, and replace the last element with -1.  After doing so, return the array.
+ *
+ * @author Andrew Jarombek
+ * @since 3/19/2020
+ */
+
 class Solution {
 
     /**
