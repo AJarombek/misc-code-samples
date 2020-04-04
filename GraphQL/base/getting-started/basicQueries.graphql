@@ -1,0 +1,91 @@
+"""
+Basic GraphQL queries using the GitHub API.
+Author: Andrew Jarombek
+Date: 4/4/2020
+"""
+
+# Access the time my profile was created and my location (out of date).
+query ProfileDetails {
+  user(login: "AJarombek") {
+    createdAt
+    location
+  }
+}
+
+# ~love is always on your side~
+query RecentRepositories($username: String = "AJarombek") {
+  user(login: $username) {
+    repositories(privacy: PUBLIC, last: 31) {
+      edges {
+        node {
+          name
+          createdAt
+        }
+      }
+    }
+  }
+}
+
+# Get the ten most coded languages in the misc-code-samples repository.
+{
+  repository(name: "misc-code-samples", owner: "AJarombek") {
+    name
+    createdAt
+    diskUsage
+    languages(first: 10, orderBy: {field: SIZE direction: DESC}) {
+      edges {
+        node {
+          name
+          color
+        }
+        size
+      }
+    }
+  }
+}
+
+# Info and primary language of SaintsXCTF repositories.
+query {
+  saintsXCTFWeb: repository(name: "saints-xctf-web", owner: "AJarombek") {
+    name
+    createdAt
+    primaryLanguage {
+      name
+    }
+  }
+  saintsXCTFAPI: repository(name: "saints-xctf-api", owner: "AJarombek") {
+    name
+    createdAt
+    primaryLanguage {
+      name
+    }
+  }
+  saintsXCTFInfrastructure: repository(name: "saints-xctf-infrastructure", owner: "AJarombek") {
+    name
+    createdAt
+    primaryLanguage {
+      name
+    }
+  }
+}
+
+# Identical query with fragments.
+query {
+  saintsXCTFWeb: repository(name: "saints-xctf-web", owner: "AJarombek") {
+    ...repoFields
+  }
+  saintsXCTFAPI: repository(name: "saints-xctf-api", owner: "AJarombek") {
+    ...repoFields
+  }
+  saintsXCTFInfrastructure: repository(name: "saints-xctf-infrastructure", owner: "AJarombek") {
+    ...repoFields
+  }
+}
+
+fragment repoFields on Repository {
+  name
+  createdAt
+  primaryLanguage {
+    name
+  }
+}
