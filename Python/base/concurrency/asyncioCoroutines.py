@@ -6,7 +6,7 @@ Date: 10/3/2020
 
 import asyncio
 import time
-from typing import Tuple, List
+from typing import Tuple, List, Generator, Any
 
 """
 Asyncio example in Python 3.5+
@@ -88,7 +88,7 @@ def predicted_weekly_mileage_deprecated() -> float:
 
 
 @asyncio.coroutine
-def running_predictions_deprecated() -> Tuple[float, float]:
+def running_predictions_deprecated() -> Generator[Any, Any, Tuple[float, float]]:
     sunday_run = yield from predicted_sunday_run_length()
     weekly_mileage = yield from predicted_weekly_mileage()
     return sunday_run, weekly_mileage

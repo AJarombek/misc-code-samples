@@ -24,6 +24,10 @@ async def make_request(session: aiohttp.ClientSession, endpoint: str) -> Tuple[s
 
 
 async def make_requests() -> int:
+    """
+    Make HTTP requests using aiohttp.
+    :return: The number of successful API calls made (with 200 HTTP codes).
+    """
     endpoints = ['posts', 'comments', 'albums', 'photos', 'todos', 'users']
     success_count = 0
 
