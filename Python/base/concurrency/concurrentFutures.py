@@ -1,6 +1,5 @@
 """
 Demonstrate calling an API with the ThreadPoolExecutor & ProcessPoolExecutor classes in the concurrent.futures module.
-On my machine, this is approximately 2.5x faster than using requests to make API calls sequentially.
 Author: Andrew Jarombek
 Date: 10/3/2020
 """
