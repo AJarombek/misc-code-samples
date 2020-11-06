@@ -11,3 +11,5 @@ C/base/data_structures/build/
 Java/base/practice/2019/threeinone/target/**
 **/node_modules
 **/Python/venv/**
+**/Java/**/gradle/**
+**/Java/**/.gradle/**

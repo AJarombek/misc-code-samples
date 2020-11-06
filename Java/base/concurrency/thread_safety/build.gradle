@@ -1,0 +1,36 @@
+/**
+ * Gradle build file for code written while learning about thread safety in Java.
+ * @author Andrew Jarombek
+ * @since 11/5/2020
+ */
+
+plugins {
+    id 'java'
+    id 'application'
+}
+
+sourceCompatibility = 1.10
+
+version = '1.0'
+
+repositories {
+	mavenCentral()
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs 'src'
+		}
+	}
+}
+
+dependencies {
+	implementation 'junit:junit:4.12'
+	testImplementation 'junit:junit:4.13'
+}
+
+test {
+	useJUnit()
+	maxHeapSize = '1G'
+}
