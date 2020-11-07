@@ -13,3 +13,4 @@ Java/base/practice/2019/threeinone/target/**
 **/Python/venv/**
 **/Java/**/gradle/**
 **/Java/**/.gradle/**
+**/Java/**/build/**

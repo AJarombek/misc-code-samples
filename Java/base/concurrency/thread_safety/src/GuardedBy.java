@@ -10,4 +10,6 @@ import java.lang.annotation.*;
 @Documented
 @Target(value = {ElementType.FIELD, ElementType.METHOD})
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface GuardedBy {}
+public @interface GuardedBy {
+    String value() default "";
+}

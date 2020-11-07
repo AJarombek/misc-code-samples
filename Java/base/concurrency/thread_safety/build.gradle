@@ -6,7 +6,6 @@
 
 plugins {
     id 'java'
-    id 'application'
 }
 
 sourceCompatibility = 1.10
@@ -20,13 +19,17 @@ repositories {
 sourceSets {
 	main {
 		java {
-			srcDirs 'src'
+			srcDirs = ['src']
+		}
+	}
+	test {
+		java {
+			srcDirs = ['test']
 		}
 	}
 }
 
 dependencies {
-	implementation 'junit:junit:4.12'
 	testImplementation 'junit:junit:4.13'
 }
 
